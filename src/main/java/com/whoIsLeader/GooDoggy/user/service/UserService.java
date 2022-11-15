@@ -6,8 +6,11 @@ import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponse;
 import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,5 +59,25 @@ public class UserService {
         } catch (Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
         }
+    }
+
+    public void login(UserReq.GetUserIdPw userIdPw, HttpServletRequest request) throws BaseException{
+        Optional<UserEntity> optional = this.userRepository.findById(userIdPw.getId());
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_ID);
+        }
+        if(!optional.get().getPassword().equals(userIdPw.getPassword())){
+            throw new BaseException(BaseResponseStatus.DISMATCH_PASSWORD);
+        }
+        HttpSession session = request.getSession();
+        session.setAttribute("LOGIN_USER", optional.get());
+    }
+
+    public void logout(HttpServletRequest request) throws BaseException{
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        session.invalidate();
     }
 }

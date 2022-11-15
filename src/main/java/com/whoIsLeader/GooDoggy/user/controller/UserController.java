@@ -5,7 +5,10 @@ import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponse;
 import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -35,6 +38,28 @@ public class UserController {
             this.userService.signin(userInfo);
             return new BaseResponse<>("회원가입이 정상적으로 처리되었습니다.");
         } catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/login")
+    public BaseResponse<String> login(@RequestBody UserReq.GetUserIdPw userIdPw, HttpServletRequest request){
+        try{
+            this.userService.login(userIdPw, request);
+            return new BaseResponse<>("로그인이 정상적으로 처리되었습니다.");
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/logout")
+    public BaseResponse<String> logout(HttpServletRequest request){
+        try {
+            this.userService.logout(request);
+            return new BaseResponse<>("로그아웃이 정상적으로 처리되었습니다.");
+        } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
     }
