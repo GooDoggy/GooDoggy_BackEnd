@@ -19,4 +19,9 @@ public class UserReq {
         private String password_check;
     }
 
+    @Getter
+    public static class GetUserIdPw{
+        private String id;
+        private String password;
+    }
 }
