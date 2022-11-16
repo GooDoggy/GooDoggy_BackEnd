@@ -21,7 +21,7 @@ public class PersonalEntity extends BaseEntity {
     //pSubscriptionIdx, userIdx, serviceName, planName, price, firstDayOfPayment, paymentCycle, category, account, status
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pSubscriptionIdx;
+    private Long personalIdx;
 
     @ManyToOne
     @JoinColumn(name = "userIdx")

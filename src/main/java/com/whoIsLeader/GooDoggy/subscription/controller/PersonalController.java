@@ -1,6 +1,8 @@
 package com.whoIsLeader.GooDoggy.subscription.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalReq;
+import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
 import com.whoIsLeader.GooDoggy.subscription.service.PersonalService;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
@@ -8,6 +10,7 @@ import com.whoIsLeader.GooDoggy.util.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/subscriptions/personal")
@@ -26,6 +29,17 @@ public class PersonalController {
             this.personalService.addSubscription(subInfo, request);
             return new BaseResponse<>("개인 구독을 등록하였습니다.");
         } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/")
+    public BaseResponse<List<PersonalRes.subscription>> getSubscriptionList(HttpServletRequest request){
+        try{
+            List<PersonalRes.subscription> subscriptionList = this.personalService.getSubscriptionList(request);
+            return new BaseResponse<>(subscriptionList);
+        } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
     }
