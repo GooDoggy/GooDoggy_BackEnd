@@ -16,6 +16,7 @@ public enum BaseResponseStatus {
     NON_EXIST_SESSION(false, 2005, "유저 세션이 존재하지 않습니다."),
     INACTIVE_USER(false,2006,"비활성화 처리된 유저입니다."),
     NON_EXIST_USERIDX(false, 2007, "유저 인덱스가 존재하지 않습니다."),
+    NON_EXIST_SUBSCRIPTION(false, 2008, "해당 인덱스를 갖는 개인 구독이 존재하지 않습니다."),
 
     DATABASE_INSERT_ERROR(false, 6000, "데이터베이스 저장 오류가 발생하였습니다.")
     ;
