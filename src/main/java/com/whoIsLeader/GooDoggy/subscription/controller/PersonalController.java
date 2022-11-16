@@ -43,4 +43,15 @@ public class PersonalController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/payment/{personalIdx}")
+    public BaseResponse<PersonalRes.paymentReport> getPaymentReport(@PathVariable Long personalIdx, HttpServletRequest request){
+        try{
+            PersonalRes.paymentReport paymentReport= this.personalService.getPaymentReport(personalIdx, request);
+            return new BaseResponse<>(paymentReport);
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

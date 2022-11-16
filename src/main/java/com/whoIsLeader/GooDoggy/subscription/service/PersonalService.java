@@ -10,15 +10,13 @@ import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
+
 import net.bytebuddy.asm.Advice;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,5 +101,55 @@ public class PersonalService {
         return subscriptionList;
     }
 
+    public PersonalRes.paymentReport getPaymentReport(Long personalIdx, HttpServletRequest request) throws BaseException{
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+        Optional<PersonalEntity> personalEntity = this.personalRepository.findByPersonalIdx(personalIdx);
+        if(personalEntity.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SUBSCRIPTION);
+        }
+        List<PersonalRes.paymentHistory> paymentHistoryList = new ArrayList<>();
+        LocalDate nextPayment = personalEntity.get().getFirstDayOfPayment();
+        Long totalCost = 0L;
+        Long price = personalEntity.get().getPrice();
+        Long count = 0L;
+        String account = personalEntity.get().getAccount();
+        if(personalEntity.get().getPaymentCycle() < 0){
+            while(nextPayment.isBefore(LocalDate.now())){
+                totalCost += price;
+                PersonalRes.paymentHistory paymentHistory = new PersonalRes.paymentHistory(nextPayment, totalCost, price, account);
+                paymentHistoryList.add(paymentHistory);
+                nextPayment = nextPayment.plusMonths(personalEntity.get().getPaymentCycle()*(-1));
+                count++;
+                if(paymentHistoryList.size() > 5){
+                    paymentHistoryList.remove(0);
+                }
+            }
+        }
+        else{
+            while(nextPayment.isBefore(LocalDate.now())){
+                totalCost += price;
+                PersonalRes.paymentHistory paymentHistory = new PersonalRes.paymentHistory(nextPayment, totalCost, price, account);
+                paymentHistoryList.add(paymentHistory);
+                nextPayment = nextPayment.plusDays(personalEntity.get().getPaymentCycle());
+                count++;
+                if(paymentHistoryList.size() > 5){
+                    paymentHistoryList.remove(0);
+                }
+            }
+        }
+        PersonalRes.paymentReport paymentReport = new PersonalRes.paymentReport(paymentHistoryList, count);
+        return paymentReport;
+    }
 
 }
