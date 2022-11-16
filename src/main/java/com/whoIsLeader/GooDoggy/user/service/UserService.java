@@ -66,6 +66,9 @@ public class UserService {
         if(optional.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_ID);
         }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
         if(!optional.get().getPassword().equals(userIdPw.getPassword())){
             throw new BaseException(BaseResponseStatus.DISMATCH_PASSWORD);
         }
