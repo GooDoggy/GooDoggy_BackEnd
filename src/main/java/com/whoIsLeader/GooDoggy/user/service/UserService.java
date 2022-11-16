@@ -35,7 +35,7 @@ public class UserService {
     }
 
     public void signin(UserReq.GetUserInfo userInfo) throws BaseException{
-        Optional<UserEntity> optional = userRepository.findById(userInfo.getId());
+        Optional<UserEntity> optional = this.userRepository.findById(userInfo.getId());
         if(!optional.isEmpty()){
             throw new BaseException(BaseResponseStatus.DUPLICATE_ID);
         }
@@ -55,7 +55,7 @@ public class UserService {
                 .password(userInfo.getPassword())
                 .build();
         try{
-            userRepository.save(userEntity);
+            this.userRepository.save(userEntity);
         } catch (Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
         }
@@ -70,7 +70,7 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.DISMATCH_PASSWORD);
         }
         HttpSession session = request.getSession();
-        session.setAttribute("LOGIN_USER", optional.get());
+        session.setAttribute("LOGIN_USER", optional.get().getUserIdx());
     }
 
     public void logout(HttpServletRequest request) throws BaseException{
