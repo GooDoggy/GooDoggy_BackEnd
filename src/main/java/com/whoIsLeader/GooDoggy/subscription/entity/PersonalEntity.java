@@ -47,7 +47,7 @@ public class PersonalEntity extends BaseEntity {
     @Column(nullable = false)
     private Category category;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String account;
 
     @Column(columnDefinition = "varchar(10) default 'active'")
