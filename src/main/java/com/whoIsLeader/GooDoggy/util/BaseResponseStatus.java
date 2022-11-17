@@ -22,7 +22,7 @@ public enum BaseResponseStatus {
     EXIST_FRIEND_REQUEST(false, 2011, "유저로부터 받은 친구 요청이 수락 대기 상태입니다."),
     ALREADY_FRIEND(false, 2012, "이미 친구 목록에 존재하는 유저입니다."),
     INVALID_FRIEND_REQUEST(false, 2013, "본 계정으로의 친구 신청은 불가합니다."),
-
+    NON_EXIST_FRIENDIDX(false, 2014, "친구 인덱스가 존재하지 않습니다."),
 
     DATABASE_INSERT_ERROR(false, 6000, "데이터베이스 저장 오류가 발생하였습니다.")
     ;

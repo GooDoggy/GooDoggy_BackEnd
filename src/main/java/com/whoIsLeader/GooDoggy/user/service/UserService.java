@@ -137,4 +137,23 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
         }
     }
+
+    public String acceptFriend(Long friendIdx, HttpServletRequest request) throws BaseException{
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional1 = this.userRepository.findByUserIdx(userIdx);
+        if(optional1.isEmpty()){
+            throw new BaseException(BaseResponseStatus.INVALID_SESSION_INFORMATION);
+        }
+        Optional<FriendEntity> optional = this.friendRepository.findByFriendIdx(friendIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_FRIENDIDX);
+        }
+        optional.get().changeStatus("active");
+        this.friendRepository.save(optional.get());
+        return "name";
+    }
 }
