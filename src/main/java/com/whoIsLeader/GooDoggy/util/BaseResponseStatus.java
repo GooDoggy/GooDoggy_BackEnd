@@ -17,6 +17,12 @@ public enum BaseResponseStatus {
     INACTIVE_USER(false,2006,"비활성화 처리된 유저입니다."),
     NON_EXIST_USERIDX(false, 2007, "유저 인덱스가 존재하지 않습니다."),
     NON_EXIST_SUBSCRIPTION(false, 2008, "해당 인덱스를 갖는 개인 구독이 존재하지 않습니다."),
+    INVALID_SESSION_INFORMATION(false, 2009, "잘못된 세션 정보입니다."),
+    EXIST_USER_REQUEST(false, 2010, "유저에게 보낸 친구 요청이 수락 대기 상태입니다."),
+    EXIST_FRIEND_REQUEST(false, 2011, "유저로부터 받은 친구 요청이 수락 대기 상태입니다."),
+    ALREADY_FRIEND(false, 2012, "이미 친구 목록에 존재하는 유저입니다."),
+    INVALID_FRIEND_REQUEST(false, 2013, "본 계정으로의 친구 신청은 불가합니다."),
+
 
     DATABASE_INSERT_ERROR(false, 6000, "데이터베이스 저장 오류가 발생하였습니다.")
     ;

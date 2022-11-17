@@ -63,4 +63,15 @@ public class UserController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @PostMapping("/friends/{id}")
+    public BaseResponse<String> requestFriend(@PathVariable String id, HttpServletRequest request){
+        try{
+            this.userService.requestFriend(id, request);
+            return new BaseResponse<>(id.toString() + "님에게 친구 요청을 전송하였습니다.");
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
