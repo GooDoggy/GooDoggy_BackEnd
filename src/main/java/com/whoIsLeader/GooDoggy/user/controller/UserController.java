@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PatchMapping("/friends/{friendIdx}")
+    @PatchMapping("/friends/accept/{friendIdx}")
     public BaseResponse<String> acceptFriend(@PathVariable Long friendIdx, HttpServletRequest request){
         try{
             String name = this.userService.acceptFriend(friendIdx, request);
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @DeleteMapping("/friends/{friendIdx}")
+    @DeleteMapping("/friends/reject/{friendIdx}")
     public BaseResponse<String> rejectFriend(@PathVariable Long friendIdx, HttpServletRequest request){
         try{
             String name = this.userService.rejectFriend(friendIdx, request);
