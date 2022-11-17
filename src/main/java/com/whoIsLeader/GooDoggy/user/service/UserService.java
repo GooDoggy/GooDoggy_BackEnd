@@ -152,8 +152,12 @@ public class UserService {
         if(optional.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_FRIENDIDX);
         }
-        optional.get().changeStatus("active");
-        this.friendRepository.save(optional.get());
-        return "name";
+        try{
+            optional.get().changeStatus("active");
+            this.friendRepository.save(optional.get());
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.DATABASE_PATCH_ERROR);
+        }
+        return optional.get().getReqUserIdx().getId();
     }
 }
