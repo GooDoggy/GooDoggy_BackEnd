@@ -40,4 +40,8 @@ public class FriendEntity extends BaseEntity{
         this.resUserIdx = userEntity2;
         this.status = status;
     }
+
+    public void changeStatus(String status){
+        this.status = status;
+    }
 }

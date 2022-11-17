@@ -74,4 +74,15 @@ public class UserController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @PatchMapping("/friends/{friendIdx}")
+    public BaseResponse<String> acceptFriend(@PathVariable Long friendIdx, HttpServletRequest request){
+        try{
+            String name = this.userService.acceptFriend(friendIdx, request);
+            return new BaseResponse<>( name + "님의 친구 요청을 수락하였습니다.");
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
