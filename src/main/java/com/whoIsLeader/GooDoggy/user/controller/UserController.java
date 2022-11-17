@@ -85,4 +85,15 @@ public class UserController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @DeleteMapping("/friends/{friendIdx}")
+    public BaseResponse<String> rejectFriend(@PathVariable Long friendIdx, HttpServletRequest request){
+        try{
+            String name = this.userService.rejectFriend(friendIdx, request);
+            return new BaseResponse<>( name + "님의 친구 요청을 거절하였습니다.");
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

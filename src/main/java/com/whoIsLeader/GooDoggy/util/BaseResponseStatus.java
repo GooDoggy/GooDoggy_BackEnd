@@ -25,7 +25,8 @@ public enum BaseResponseStatus {
     NON_EXIST_FRIENDIDX(false, 2014, "친구 인덱스가 존재하지 않습니다."),
 
     DATABASE_INSERT_ERROR(false, 6000, "데이터베이스 저장 오류가 발생하였습니다."),
-    DATABASE_PATCH_ERROR(false, 6001, "데이터베이스 수정 오류가 발생하였습니다.")
+    DATABASE_PATCH_ERROR(false, 6001, "데이터베이스 수정 오류가 발생하였습니다."),
+    DATABASE_DELETE_ERROR(false, 6002, "데이터베이스 삭제 오류가 발생하였습니다.")
     ;
 
     private final boolean isSuccess;
