@@ -110,10 +110,10 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/pw")
-    public BaseResponse<String> findPw(@RequestBody UserReq.GetUserNameId userNameId){
+    public BaseResponse<Long> findPw(@RequestBody UserReq.GetUserNameId userNameId){
         try{
-            this.userService.findPw(userNameId);
-            return new BaseResponse<>("일치하는 회원 정보가 존재합니다.");
+            Long userIdx = this.userService.findPw(userNameId);
+            return new BaseResponse<>(userIdx);
         } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }

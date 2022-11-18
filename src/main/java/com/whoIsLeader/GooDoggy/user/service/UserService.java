@@ -100,7 +100,7 @@ public class UserService {
         return optional.get().getId();
     }
 
-    public void findPw(UserReq.GetUserNameId userNameId) throws BaseException{
+    public Long findPw(UserReq.GetUserNameId userNameId) throws BaseException{
         Optional<UserEntity> optional = this.userRepository.findByNameAndId(userNameId.getName(), userNameId.getId());
         if(optional.isEmpty()){
             throw new BaseException(BaseResponseStatus.INVALID_NAME_ID);
@@ -108,6 +108,7 @@ public class UserService {
         if(optional.get().getStatus().equals("inactive")){
             throw new BaseException(BaseResponseStatus.INACTIVE_USER);
         }
+        return optional.get().getUserIdx();
     }
 
     public void changePw(UserReq.GetUserPws userPws) throws BaseException{
