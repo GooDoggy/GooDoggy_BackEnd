@@ -56,4 +56,8 @@ public class UserEntity extends BaseEntity {
         this.status = status;
         this.personalEntityList = personalEntityList;
     }
+
+    public void changePw(String newPassword){
+        this.password = newPassword;
+    }
 }

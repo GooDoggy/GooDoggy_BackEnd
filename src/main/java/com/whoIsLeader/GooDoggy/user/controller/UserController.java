@@ -118,4 +118,15 @@ public class UserController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @PatchMapping("/pw")
+    public BaseResponse<String> changePw(@RequestBody UserReq.GetUserPws userPws){
+        try{
+            this.userService.changePw(userPws);
+            return new BaseResponse<>("비밀번호 변경이 정상적으로 처리되었습니다.");
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
