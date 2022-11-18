@@ -36,4 +36,11 @@ public class UserReq {
         private String name;
         private String id;
     }
+
+    @Getter
+    public static class GetUserPws{
+        private Long userIdx;
+        private String newPassword;
+        private String newPassword_check;
+    }
 }

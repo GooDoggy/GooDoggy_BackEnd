@@ -110,6 +110,25 @@ public class UserService {
         }
     }
 
+    public void changePw(UserReq.GetUserPws userPws) throws BaseException{
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userPws.getUserIdx());
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+        if(!userPws.getNewPassword().equals(userPws.getNewPassword_check())){
+            throw new BaseException(BaseResponseStatus.DISMATCH_PASSWORD);
+        }
+        try{
+            optional.get().changePw(userPws.getNewPassword());
+            this.userRepository.save(optional.get());
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.DATABASE_PATCH_ERROR);
+        }
+    }
+
     public void requestFriend(String id, HttpServletRequest request) throws BaseException{
         HttpSession session = request.getSession(false);
         if(session == null){
