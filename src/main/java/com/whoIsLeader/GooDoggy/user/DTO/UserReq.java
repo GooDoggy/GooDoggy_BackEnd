@@ -24,4 +24,10 @@ public class UserReq {
         private String id;
         private String password;
     }
+
+    @Getter
+    public static class GetUserNameEmail{
+        private String name;
+        private String email;
+    }
 }

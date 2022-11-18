@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -86,6 +87,17 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
         }
         session.invalidate();
+    }
+
+    public String findId(UserReq.GetUserNameEmail userNameEmail) throws BaseException{
+        Optional<UserEntity> optional = this.userRepository.findByNameAndEmail(userNameEmail.getName(), userNameEmail.getEmail());
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.INVALID_NAME_EMAIL);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+        return optional.get().getId();
     }
 
     public void requestFriend(String id, HttpServletRequest request) throws BaseException{
@@ -182,4 +194,5 @@ public class UserService {
         }
         return optional.get().getReqUserIdx().getId();
     }
+
 }

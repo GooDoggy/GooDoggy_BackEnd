@@ -96,4 +96,15 @@ public class UserController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @PostMapping("/id")
+    public BaseResponse<String> findId(@RequestBody UserReq.GetUserNameEmail userNameEmail){
+        try{
+            String id = this.userService.findId(userNameEmail);
+            return new BaseResponse<>(id);
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
