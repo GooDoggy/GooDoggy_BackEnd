@@ -23,7 +23,8 @@ public enum BaseResponseStatus {
     ALREADY_FRIEND(false, 2012, "이미 친구 목록에 존재하는 유저입니다."),
     INVALID_FRIEND_REQUEST(false, 2013, "본 계정으로의 친구 신청은 불가합니다."),
     NON_EXIST_FRIENDIDX(false, 2014, "친구 인덱스가 존재하지 않습니다."),
-    INVALID_NAME_EMAIL(false, 2015, "아이디와 이메일이 일치하는 유저 정보가 없습니다."),
+    INVALID_NAME_EMAIL(false, 2015, "이름과 이메일이 일치하는 유저 정보가 없습니다."),
+    INVALID_NAME_ID(false, 2016, "이름과 아이디가 일치하는 유저 정보가 없습니다."),
 
     DATABASE_INSERT_ERROR(false, 6000, "데이터베이스 저장 오류가 발생하였습니다."),
     DATABASE_PATCH_ERROR(false, 6001, "데이터베이스 수정 오류가 발생하였습니다."),

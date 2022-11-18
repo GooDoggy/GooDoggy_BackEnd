@@ -107,4 +107,15 @@ public class UserController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @PostMapping("/pw")
+    public BaseResponse<String> findPw(@RequestBody UserReq.GetUserNameId userNameId){
+        try{
+            this.userService.findPw(userNameId);
+            return new BaseResponse<>("일치하는 회원 정보가 존재합니다.");
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
