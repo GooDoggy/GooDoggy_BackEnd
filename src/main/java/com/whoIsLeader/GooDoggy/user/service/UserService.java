@@ -100,6 +100,16 @@ public class UserService {
         return optional.get().getId();
     }
 
+    public void findPw(UserReq.GetUserNameId userNameId) throws BaseException{
+        Optional<UserEntity> optional = this.userRepository.findByNameAndId(userNameId.getName(), userNameId.getId());
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.INVALID_NAME_ID);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+    }
+
     public void requestFriend(String id, HttpServletRequest request) throws BaseException{
         HttpSession session = request.getSession(false);
         if(session == null){

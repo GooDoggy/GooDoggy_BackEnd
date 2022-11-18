@@ -30,4 +30,10 @@ public class UserReq {
         private String name;
         private String email;
     }
+
+    @Getter
+    public static class GetUserNameId{
+        private String name;
+        private String id;
+    }
 }
