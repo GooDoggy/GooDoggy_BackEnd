@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@Table(name = "personal")
+@Table(name = "personalSub")
 @NoArgsConstructor
 @DynamicInsert
 public class PersonalEntity extends BaseEntity {
