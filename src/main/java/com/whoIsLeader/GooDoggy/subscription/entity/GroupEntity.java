@@ -4,6 +4,7 @@ import com.whoIsLeader.GooDoggy.util.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Setter
 @Getter
 @Table(name = "groupSub")
 @NoArgsConstructor
