@@ -42,4 +42,15 @@ public class GroupController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/payment/{groupIdx}")
+    public BaseResponse<GroupRes.paymentReport> getPaymentReport(@PathVariable Long groupIdx, HttpServletRequest request){
+        try{
+            GroupRes.paymentReport paymentReport = this.groupService.getPaymentReport(groupIdx, request);
+            return new BaseResponse<>(paymentReport);
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

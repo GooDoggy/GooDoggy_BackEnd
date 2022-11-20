@@ -134,4 +134,56 @@ public class GroupService {
         }
         return true;
     }
+
+    public GroupRes.paymentReport getPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+
+        Optional<GroupEntity> groupEntity = this.groupRepository.findByGroupIdx(groupIdx);
+        if(groupEntity.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
+        }
+        List<GroupRes.paymentHistory> paymentHistoryList = new ArrayList<>();
+        LocalDate nextPayment = groupEntity.get().getFirstDayOfPayment();
+        Long totalCost = 0L;
+        Long price = groupEntity.get().getPrice();
+        Long count = 0L;
+        String account = groupEntity.get().getAccount();
+        if(groupEntity.get().getPaymentCycle() < 0){
+            while(nextPayment.isBefore(LocalDate.now())){
+                totalCost += price;
+                GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(nextPayment, totalCost, price, account);
+                paymentHistoryList.add(paymentHistory);
+                nextPayment = nextPayment.plusMonths(groupEntity.get().getPaymentCycle()*(-1));
+                count++;
+                if(paymentHistoryList.size() > 5){
+                    paymentHistoryList.remove(0);
+                }
+            }
+        }
+        else{
+            while(nextPayment.isBefore(LocalDate.now())){
+                totalCost += price;
+                GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(nextPayment, totalCost, price, account);
+                paymentHistoryList.add(paymentHistory);
+                nextPayment = nextPayment.plusDays(groupEntity.get().getPaymentCycle());
+                count++;
+                if(paymentHistoryList.size() > 5){
+                    paymentHistoryList.remove(0);
+                }
+            }
+        }
+        GroupRes.paymentReport paymentReport = new GroupRes.paymentReport(paymentHistoryList, count);
+        return paymentReport;
+    }
 }
