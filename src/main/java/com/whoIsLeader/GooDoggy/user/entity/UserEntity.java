@@ -2,6 +2,7 @@ package com.whoIsLeader.GooDoggy.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
+import com.whoIsLeader.GooDoggy.subscription.entity.UserGroupEntity;
 import com.whoIsLeader.GooDoggy.util.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,8 +47,12 @@ public class UserEntity extends BaseEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "userIdx", orphanRemoval = true)
     private List<PersonalEntity> personalEntityList = new ArrayList<>();
 
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userIdx", orphanRemoval = true)
+//    private List<UserGroupEntity> userGroupEntityList = new ArrayList<>();
+
     @Builder
-    public UserEntity(String name, String email, String id, String password, String profileImgUrl, String status, List<PersonalEntity> personalEntityList){
+    public UserEntity(String name, String email, String id, String password, String profileImgUrl, String status,
+                      List<PersonalEntity> personalEntityList){
         this.name = name;
         this.email = email;
         this.id = id;

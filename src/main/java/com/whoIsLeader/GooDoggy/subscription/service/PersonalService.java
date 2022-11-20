@@ -116,7 +116,7 @@ public class PersonalService {
         }
         Optional<PersonalEntity> personalEntity = this.personalRepository.findByPersonalIdx(personalIdx);
         if(personalEntity.isEmpty()){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SUBSCRIPTION);
+            throw new BaseException(BaseResponseStatus.NON_EXIST_PERSONALIDX);
         }
         List<PersonalRes.paymentHistory> paymentHistoryList = new ArrayList<>();
         LocalDate nextPayment = personalEntity.get().getFirstDayOfPayment();

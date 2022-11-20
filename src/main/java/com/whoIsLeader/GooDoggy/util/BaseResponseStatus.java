@@ -21,8 +21,10 @@ public enum BaseResponseStatus {
     NON_EXIST_ID(false, 2030, "아이디가 존재하지 않습니다."),
     NON_EXIST_SESSION(false, 2031, "유저 세션이 존재하지 않습니다."),
     NON_EXIST_USERIDX(false, 2032, "유저 인덱스가 존재하지 않습니다."),
-    NON_EXIST_SUBSCRIPTION(false, 2033, "해당 인덱스를 갖는 개인 구독이 존재하지 않습니다."),
+    NON_EXIST_PERSONALIDX(false, 2033, "해당 개인 구독 인덱스를 갖는 데이터가 존재하지 않습니다."),
     NON_EXIST_FRIENDIDX(false, 2034, "친구 인덱스가 존재하지 않습니다."),
+    NON_EXIST_STATUS(false, 2035, "해당 상태를 갖는 데이터가 존재하지 않습니다."),
+    NON_EXIST_GROUPIDX(false, 2036, "해당 다인 구독 인덱스를 갖는 데이터가 존재하지 않습니다."),
 
     EXIST_USER_REQUEST(false, 2040, "유저에게 보낸 친구 요청이 수락 대기 상태입니다."),
     EXIST_FRIEND_REQUEST(false, 2041, "유저로부터 받은 친구 요청이 수락 대기 상태입니다."),
