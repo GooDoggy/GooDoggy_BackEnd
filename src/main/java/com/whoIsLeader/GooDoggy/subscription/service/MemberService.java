@@ -1,5 +1,6 @@
 package com.whoIsLeader.GooDoggy.subscription.service;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.whoIsLeader.GooDoggy.subscription.DTO.GroupRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.MemberRes;
 import com.whoIsLeader.GooDoggy.subscription.entity.Category;
@@ -85,5 +86,47 @@ public class MemberService {
             throw new BaseException(BaseResponseStatus.NON_EXIST_MEMBER);
         }
         return subscriptionList;
+    }
+
+    public void joinGroupSubscription(Long groupIdx, HttpServletRequest request) throws BaseException {
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+
+        Optional<GroupEntity> groupEntity = this.groupRepository.findByGroupIdx(groupIdx);
+        if(groupEntity.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
+        }
+
+        Optional<UserGroupEntity> optional1 = this.userGroupRepository.findByUserIdxAndGroupIdx(optional.get(), groupEntity.get());
+        if(!optional1.isEmpty()){
+            throw new BaseException(BaseResponseStatus.ALREADY_JOINED);
+        }
+
+        UserGroupEntity userGroupEntity = UserGroupEntity.builder()
+                .userEntity(optional.get())
+                .groupEntity(groupEntity.get())
+                .build();
+
+        if(groupEntity.get().getJoinNum() >= groupEntity.get().getTargetNum()){
+            throw new BaseException(BaseResponseStatus.FAILED_TO_JOIN_GROUP);
+        }
+        groupEntity.get().setJoinNum(groupEntity.get().getJoinNum() + 1);
+        try{
+            this.userGroupRepository.save(userGroupEntity);
+            this.groupRepository.save(groupEntity.get());
+        } catch (Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
+        }
+
     }
 }
