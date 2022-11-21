@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
     Optional<GroupEntity> findByStatus(String status);
     Optional<GroupEntity> findByGroupIdx(Long groupIdx);
+    List<GroupEntity> findAllByStatus(String status);
 }
