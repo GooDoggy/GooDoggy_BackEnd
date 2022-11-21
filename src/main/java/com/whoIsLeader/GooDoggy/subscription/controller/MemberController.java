@@ -42,4 +42,15 @@ public class MemberController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @PostMapping("/{groupIdx}")
+    public BaseResponse<String> joinGroupSubscription(@PathVariable Long groupIdx, HttpServletRequest request) {
+        try {
+            this.memberService.joinGroupSubscription(groupIdx, request);
+            return new BaseResponse<>("다인 구독 그룹에 참여하였습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

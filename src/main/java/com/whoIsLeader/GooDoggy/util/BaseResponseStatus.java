@@ -31,10 +31,12 @@ public enum BaseResponseStatus {
     EXIST_FRIEND_REQUEST(false, 2041, "유저로부터 받은 친구 요청이 수락 대기 상태입니다."),
 
     FAILED_TO_LOGIN(false, 2050, "로그인 처리를 실패하였습니다."),
+    FAILED_TO_JOIN_GROUP(false, 2051, "다인 구독 참여에 실패하였습니다."),
 
     INACTIVE_USER(false,2060,"비활성화 처리된 유저입니다."),
 
-    ALREADY_FRIEND(false, 2061, "이미 친구 목록에 존재하는 유저입니다."),
+    ALREADY_FRIEND(false, 2071, "이미 친구 목록에 존재하는 유저입니다."),
+    ALREADY_JOINED(false, 2072, "이미 참여한 다인 구독 그룹입니다."),
 
     DATABASE_INSERT_ERROR(false, 6000, "데이터베이스 저장 오류가 발생하였습니다."),
     DATABASE_PATCH_ERROR(false, 6001, "데이터베이스 수정 오류가 발생하였습니다."),
