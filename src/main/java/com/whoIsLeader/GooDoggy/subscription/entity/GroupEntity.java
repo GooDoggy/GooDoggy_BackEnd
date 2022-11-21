@@ -51,6 +51,9 @@ public class GroupEntity extends BaseEntity {
     private String account;
 
     @Column(nullable = false)
+    private Long joinNum;
+
+    @Column(nullable = false)
     private Long targetNum;
 
     @Column(nullable = false, length = 100)
@@ -61,7 +64,7 @@ public class GroupEntity extends BaseEntity {
 
     @Builder
     public GroupEntity(String serviceName, String planName, Long price, LocalDate firstDayOfPayment, LocalDate lastDayOfPayment,
-                        Long paymentCycle, Category category, String account, Long targetNum, String contents, String status){
+                        Long paymentCycle, Category category, String account, Long joinNum, Long targetNum, String contents, String status){
         this.serviceName = serviceName;
         this.planName = planName;
         this.price = price;
@@ -70,6 +73,7 @@ public class GroupEntity extends BaseEntity {
         this.paymentCycle = paymentCycle;
         this.category = category;
         this.account = account;
+        this.joinNum = joinNum;
         this.targetNum = targetNum;
         this.contents = contents;
         this.status = status;
