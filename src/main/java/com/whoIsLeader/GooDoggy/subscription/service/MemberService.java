@@ -2,6 +2,7 @@ package com.whoIsLeader.GooDoggy.subscription.service;
 
 import com.whoIsLeader.GooDoggy.subscription.DTO.GroupRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.MemberRes;
+import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import com.whoIsLeader.GooDoggy.subscription.entity.GroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.entity.UserGroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.repository.GroupRepository;
@@ -64,6 +65,20 @@ public class MemberService {
                 subscription.setTargetNum(temp.getTargetNum());
                 subscription.setCategory(temp.getCategory());
                 subscriptionList.add(subscription);
+            }
+        }
+        if(subscriptionList.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_MEMBER);
+        }
+        return subscriptionList;
+    }
+
+    public List<MemberRes.subscription> getCategorizedList(Category category, HttpServletRequest request) throws BaseException {
+        List<MemberRes.subscription> tempList = getSubscriptionList(request);
+        List<MemberRes.subscription> subscriptionList = new ArrayList<>();
+        for(MemberRes.subscription temp : tempList){
+            if(temp.getCategory().equals(category)){
+                subscriptionList.add(temp);
             }
         }
         if(subscriptionList.isEmpty()){
