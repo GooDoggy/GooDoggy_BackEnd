@@ -56,7 +56,10 @@ public class MemberService {
         List<GroupEntity> groupEntityList = groupRepository.findAllByStatus("active");
         List<MemberRes.subscription> subscriptionList = new ArrayList<>();
         for(GroupEntity temp : groupEntityList){
-            if (temp.getJoinNum() < temp.getTargetNum()){
+            if(!this.userGroupRepository.findByUserIdxAndGroupIdx(optional.get(), temp).isEmpty()){
+                continue;
+            }
+            if(temp.getJoinNum() < temp.getTargetNum()){
                 MemberRes.subscription subscription = new MemberRes.subscription();
                 subscription.setGroupIdx(temp.getGroupIdx());
                 subscription.setServiceName(temp.getServiceName());
