@@ -61,6 +61,7 @@ public class GroupService {
                 .paymentCycle(subInfo.getPaymentCycle())
                 .category(subInfo.getCategory())
                 .account(subInfo.getAccount())
+                .joinNum(1L)
                 .targetNum(subInfo.getNum())
                 .contents(subInfo.getContents())
                 .build();
