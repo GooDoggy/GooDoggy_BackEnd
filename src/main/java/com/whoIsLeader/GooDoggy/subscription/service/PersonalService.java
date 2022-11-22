@@ -80,24 +80,26 @@ public class PersonalService {
         List<PersonalEntity> personalEntityList = this.personalRepository.findAllByUserIdx(optional.get());
         List<PersonalRes.subscription> subscriptionList = new ArrayList<>();
         for(PersonalEntity temp : personalEntityList){
-            PersonalRes.subscription subscription = new PersonalRes.subscription();
-            subscription.setPersonalIdx(temp.getPersonalIdx());
-            subscription.setServiceName(temp.getServiceName());
-            subscription.setPrice(temp.getPrice());
-            LocalDate nextPayment = temp.getFirstDayOfPayment();
-            if(temp.getPaymentCycle() < 0){
-                while(nextPayment.isBefore(LocalDate.now())){
-                    nextPayment = nextPayment.plusMonths(temp.getPaymentCycle()*(-1));
+            if(temp.getStatus().equals("active")){
+                PersonalRes.subscription subscription = new PersonalRes.subscription();
+                subscription.setPersonalIdx(temp.getPersonalIdx());
+                subscription.setServiceName(temp.getServiceName());
+                subscription.setPrice(temp.getPrice());
+                LocalDate nextPayment = temp.getFirstDayOfPayment();
+                if(temp.getPaymentCycle() < 0){
+                    while(nextPayment.isBefore(LocalDate.now())){
+                        nextPayment = nextPayment.plusMonths(temp.getPaymentCycle()*(-1));
+                    }
                 }
-            }
-            else{
-                while(nextPayment.isBefore(LocalDate.now())){
-                    nextPayment = nextPayment.plusDays(temp.getPaymentCycle());
+                else{
+                    while(nextPayment.isBefore(LocalDate.now())){
+                        nextPayment = nextPayment.plusDays(temp.getPaymentCycle());
+                    }
                 }
+                subscription.setNextPayment(nextPayment);
+                subscription.setCategory(temp.getCategory());
+                subscriptionList.add(subscription);
             }
-            subscription.setNextPayment(nextPayment);
-            subscription.setCategory(temp.getCategory());
-            subscriptionList.add(subscription);
         }
         return subscriptionList;
     }
