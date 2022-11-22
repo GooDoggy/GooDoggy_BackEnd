@@ -66,4 +66,8 @@ public class PersonalEntity extends BaseEntity {
         this.account = account;
         this.status = status;
     }
+
+    public void changeStatus(String newStatus){
+        this.status = newStatus;
+    }
 }

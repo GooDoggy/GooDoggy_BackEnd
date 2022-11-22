@@ -13,6 +13,7 @@ import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
 
 import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -150,6 +151,34 @@ public class PersonalService {
         }
         PersonalRes.paymentReport paymentReport = new PersonalRes.paymentReport(paymentHistoryList, count);
         return paymentReport;
+    }
+
+    public void inactiveSubscriptions(List<Long> personalIdxList, HttpServletRequest request) throws BaseException{
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+
+        for(Long temp : personalIdxList){
+            Optional<PersonalEntity> personalEntity = this.personalRepository.findByPersonalIdx(temp);
+            if(personalEntity.isEmpty()){
+                throw new BaseException(BaseResponseStatus.NON_EXIST_PERSONALIDX);
+            }
+            try{
+                personalEntity.get().changeStatus("inactive");
+                this.personalRepository.save(personalEntity.get());
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.DATABASE_PATCH_ERROR);
+            }
+        }
     }
 
 }
