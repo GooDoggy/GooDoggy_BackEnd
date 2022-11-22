@@ -1,5 +1,6 @@
 package com.whoIsLeader.GooDoggy.user.service;
 
+import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
 import com.whoIsLeader.GooDoggy.user.DTO.UserReq;
 import com.whoIsLeader.GooDoggy.user.entity.FriendEntity;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -225,4 +227,26 @@ public class UserService {
         return optional.get().getReqUserIdx().getId();
     }
 
+    public void deleteFriend(List<Long> friendIdxList, HttpServletRequest request) throws BaseException{
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional1 = this.userRepository.findByUserIdx(userIdx);
+        if(optional1.isEmpty()){
+            throw new BaseException(BaseResponseStatus.INVALID_SESSION_INFORMATION);
+        }
+        for(Long temp : friendIdxList){
+            Optional<FriendEntity> friendEntity = this.friendRepository.findByFriendIdx(temp);
+            if(friendEntity.isEmpty()){
+                throw new BaseException(BaseResponseStatus.NON_EXIST_FRIENDIDX);
+            }
+            try{
+                this.friendRepository.delete(friendEntity.get());
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.DATABASE_DELETE_ERROR);
+            }
+        }
+    }
 }

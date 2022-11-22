@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -125,6 +126,17 @@ public class UserController {
         try{
             this.userService.changePw(userPws);
             return new BaseResponse<>("비밀번호 변경이 정상적으로 처리되었습니다.");
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @DeleteMapping("/friends/{friendIdxList}")
+    public BaseResponse<String> deleteFriend(@PathVariable List<Long> friendIdxList, HttpServletRequest request){
+        try{
+            this.userService.deleteFriend(friendIdxList, request);
+            return new BaseResponse<>( "친구 삭제를 정상적으로 처리하였습니다.");
         } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
