@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -248,5 +249,79 @@ public class UserService {
                 throw new BaseException(BaseResponseStatus.DATABASE_DELETE_ERROR);
             }
         }
+    }
+
+    public List<UserEntity> getFriendList(HttpServletRequest request) throws BaseException{ //친구 신청 완료
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+        List<FriendEntity> friendEntityList = this.friendRepository.findAllByReqUserIdxOrResUserIdx(optional.get(), optional.get());
+        List<UserEntity> friendList = new ArrayList<>();
+        for(FriendEntity temp : friendEntityList){
+            if(temp.getStatus().equals("active")){
+                if(temp.getReqUserIdx().getUserIdx() == userIdx){
+                    friendList.add(temp.getResUserIdx());
+                }
+                if(temp.getResUserIdx().getUserIdx() == userIdx){
+                    friendList.add(temp.getReqUserIdx());
+                }
+            }
+        }
+        return friendList;
+    }
+
+    public List<UserEntity> getReqFriendList(HttpServletRequest request) throws  BaseException{ //유저가 받은
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+        List<FriendEntity> friendEntityList = this.friendRepository.findAllByResUserIdx(optional.get());
+        List<UserEntity> friendList = new ArrayList<>();
+        for(FriendEntity temp : friendEntityList){
+            if(temp.getStatus().equals("inactive")){
+                friendList.add(temp.getReqUserIdx());
+            }
+        }
+        return friendList;
+    }
+
+    public List<UserEntity> getResFriendList(HttpServletRequest request) throws  BaseException{ //유저가 보낸
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+        List<FriendEntity> friendEntityList = this.friendRepository.findAllByReqUserIdx(optional.get());
+        List<UserEntity> friendList = new ArrayList<>();
+        for(FriendEntity temp : friendEntityList){
+            if(temp.getStatus().equals("inactive")){
+                friendList.add(temp.getResUserIdx());
+            }
+        }
+        return friendList;
     }
 }
