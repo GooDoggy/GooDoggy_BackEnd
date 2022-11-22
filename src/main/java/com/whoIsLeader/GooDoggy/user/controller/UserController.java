@@ -1,6 +1,7 @@
 package com.whoIsLeader.GooDoggy.user.controller;
 
 import com.whoIsLeader.GooDoggy.user.DTO.UserReq;
+import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponse;
@@ -138,6 +139,39 @@ public class UserController {
             this.userService.deleteFriend(friendIdxList, request);
             return new BaseResponse<>( "친구 삭제를 정상적으로 처리하였습니다.");
         } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/friends/list")
+    public BaseResponse<List<UserEntity>> getFriendList(HttpServletRequest request){
+        try{
+            List<UserEntity> friendList = this.userService.getFriendList(request);
+            return new BaseResponse<>(friendList);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/friends/reqlist") //유저가 받은
+    public BaseResponse<List<UserEntity>> getReqFriendList(HttpServletRequest request){
+        try{
+            List<UserEntity> friendList = this.userService.getReqFriendList(request);
+            return new BaseResponse<>(friendList);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/friends/reslist") //유저가 보낸
+    public BaseResponse<List<UserEntity>> getResFriendList(HttpServletRequest request){
+        try{
+            List<UserEntity> friendList = this.userService.getResFriendList(request);
+            return new BaseResponse<>(friendList);
+        }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
     }
