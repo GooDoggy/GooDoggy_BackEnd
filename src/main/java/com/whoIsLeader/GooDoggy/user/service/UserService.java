@@ -1,6 +1,7 @@
 package com.whoIsLeader.GooDoggy.user.service;
 
 import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
+import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
 import com.whoIsLeader.GooDoggy.user.DTO.UserReq;
 import com.whoIsLeader.GooDoggy.user.entity.FriendEntity;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
@@ -251,7 +252,7 @@ public class UserService {
         }
     }
 
-    public List<UserEntity> getFriendList(HttpServletRequest request) throws BaseException{ //친구 신청 완료
+    public List<FriendRes.FriendInfo> getFriendList(HttpServletRequest request) throws BaseException{ //친구 신청 완료
         HttpSession session = request.getSession(false);
         if(session == null){
             throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
@@ -264,22 +265,24 @@ public class UserService {
         if(optional.get().getStatus().equals("inactive")){
             throw new BaseException(BaseResponseStatus.INACTIVE_USER);
         }
+
         List<FriendEntity> friendEntityList = this.friendRepository.findAllByReqUserIdxOrResUserIdx(optional.get(), optional.get());
-        List<UserEntity> friendList = new ArrayList<>();
+        List<FriendRes.FriendInfo> friendInfoList = new ArrayList<>();
         for(FriendEntity temp : friendEntityList){
             if(temp.getStatus().equals("active")){
-                if(temp.getReqUserIdx().getUserIdx() == userIdx){
-                    friendList.add(temp.getResUserIdx());
+                FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
+                friendInfo.setFriendIdx(temp.getFriendIdx());
+                friendInfo.setId(temp.getResUserIdx().getId());
+                if(friendInfo.getId().equals(optional.get().getId())){
+                    friendInfo.setId(temp.getReqUserIdx().getId());
                 }
-                if(temp.getResUserIdx().getUserIdx() == userIdx){
-                    friendList.add(temp.getReqUserIdx());
-                }
+                friendInfoList.add(friendInfo);
             }
         }
-        return friendList;
+        return friendInfoList;
     }
 
-    public List<UserEntity> getReqFriendList(HttpServletRequest request) throws  BaseException{ //유저가 받은
+    public List<FriendRes.FriendInfo> getReqFriendList(HttpServletRequest request) throws  BaseException{ //유저가 받은
         HttpSession session = request.getSession(false);
         if(session == null){
             throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
@@ -292,17 +295,21 @@ public class UserService {
         if(optional.get().getStatus().equals("inactive")){
             throw new BaseException(BaseResponseStatus.INACTIVE_USER);
         }
+
         List<FriendEntity> friendEntityList = this.friendRepository.findAllByResUserIdx(optional.get());
-        List<UserEntity> friendList = new ArrayList<>();
+        List<FriendRes.FriendInfo> friendInfoList = new ArrayList<>();
         for(FriendEntity temp : friendEntityList){
             if(temp.getStatus().equals("inactive")){
-                friendList.add(temp.getReqUserIdx());
+                FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
+                friendInfo.setFriendIdx(temp.getFriendIdx());
+                friendInfo.setId(temp.getReqUserIdx().getId());
+                friendInfoList.add(friendInfo);
             }
         }
-        return friendList;
+        return friendInfoList;
     }
 
-    public List<UserEntity> getResFriendList(HttpServletRequest request) throws  BaseException{ //유저가 보낸
+    public List<FriendRes.FriendInfo> getResFriendList(HttpServletRequest request) throws  BaseException{ //유저가 보낸
         HttpSession session = request.getSession(false);
         if(session == null){
             throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
@@ -315,13 +322,17 @@ public class UserService {
         if(optional.get().getStatus().equals("inactive")){
             throw new BaseException(BaseResponseStatus.INACTIVE_USER);
         }
+
         List<FriendEntity> friendEntityList = this.friendRepository.findAllByReqUserIdx(optional.get());
-        List<UserEntity> friendList = new ArrayList<>();
+        List<FriendRes.FriendInfo> friendInfoList = new ArrayList<>();
         for(FriendEntity temp : friendEntityList){
             if(temp.getStatus().equals("inactive")){
-                friendList.add(temp.getResUserIdx());
+                FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
+                friendInfo.setFriendIdx(temp.getFriendIdx());
+                friendInfo.setId(temp.getResUserIdx().getId());
+                friendInfoList.add(friendInfo);
             }
         }
-        return friendList;
+        return friendInfoList;
     }
 }

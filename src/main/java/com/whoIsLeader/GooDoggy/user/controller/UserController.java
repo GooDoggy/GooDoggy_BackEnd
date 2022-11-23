@@ -1,5 +1,6 @@
 package com.whoIsLeader.GooDoggy.user.controller;
 
+import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
 import com.whoIsLeader.GooDoggy.user.DTO.UserReq;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
@@ -145,9 +146,9 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/friends/list")
-    public BaseResponse<List<UserEntity>> getFriendList(HttpServletRequest request){
+    public BaseResponse<List<FriendRes.FriendInfo>> getFriendList(HttpServletRequest request){
         try{
-            List<UserEntity> friendList = this.userService.getFriendList(request);
+            List<FriendRes.FriendInfo> friendList = this.userService.getFriendList(request);
             return new BaseResponse<>(friendList);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -155,10 +156,10 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/friends/reqlist") //유저가 받은
-    public BaseResponse<List<UserEntity>> getReqFriendList(HttpServletRequest request){
+    @GetMapping("/friends/reqList") //유저가 받은
+    public BaseResponse<List<FriendRes.FriendInfo>> getReqFriendList(HttpServletRequest request){
         try{
-            List<UserEntity> friendList = this.userService.getReqFriendList(request);
+            List<FriendRes.FriendInfo> friendList = this.userService.getReqFriendList(request);
             return new BaseResponse<>(friendList);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -166,10 +167,10 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/friends/reslist") //유저가 보낸
-    public BaseResponse<List<UserEntity>> getResFriendList(HttpServletRequest request){
+    @GetMapping("/friends/resList") //유저가 보낸
+    public BaseResponse<List<FriendRes.FriendInfo>> getResFriendList(HttpServletRequest request){
         try{
-            List<UserEntity> friendList = this.userService.getResFriendList(request);
+            List<FriendRes.FriendInfo> friendList = this.userService.getResFriendList(request);
             return new BaseResponse<>(friendList);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
