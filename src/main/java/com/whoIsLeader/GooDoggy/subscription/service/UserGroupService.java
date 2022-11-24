@@ -5,6 +5,7 @@ import com.whoIsLeader.GooDoggy.subscription.entity.UserGroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.repository.GroupRepository;
 import com.whoIsLeader.GooDoggy.subscription.repository.UserGroupRepository;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
+import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,12 @@ public class UserGroupService {
     private GroupRepository groupRepository;
     private UserGroupRepository userGroupRepository;
 
-    public UserGroupService(GroupRepository groupRepository, UserGroupRepository userGroupRepository) {
+    private UserService userService;
+
+    public UserGroupService(GroupRepository groupRepository, UserGroupRepository userGroupRepository, UserService userService) {
         this.groupRepository = groupRepository;
         this.userGroupRepository = userGroupRepository;
+        this.userService = userService;
     }
 
     public Long addUserGroup(UserEntity userEntity) throws BaseException {
