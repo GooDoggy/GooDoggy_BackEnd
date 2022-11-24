@@ -43,6 +43,22 @@ public class UserService {
         }
     }
 
+    public UserEntity getSessionUser(HttpServletRequest request) throws BaseException{
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
+        }
+        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.INVALID_SESSION_INFORMATION);
+        }
+        if(optional.get().getStatus().equals("inactive")){
+            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
+        }
+        return optional.get();
+    }
+
     public void signin(UserReq.GetUserInfo userInfo) throws BaseException{
         Optional<UserEntity> optional = this.userRepository.findById(userInfo.getId());
         if(!optional.isEmpty()){
@@ -135,16 +151,8 @@ public class UserService {
     }
 
     public void requestFriend(String id, HttpServletRequest request) throws BaseException{
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional1 = this.userRepository.findByUserIdx(userIdx);
-        if(optional1.isEmpty()){
-            throw new BaseException(BaseResponseStatus.INVALID_SESSION_INFORMATION);
-        }
-        if(optional1.get().getId().equals(id)){
+        UserEntity user = getSessionUser(request);
+        if(user.getId().equals(id)){
             throw new BaseException(BaseResponseStatus.INVALID_FRIEND_REQUEST);
         }
         Optional<UserEntity> optional2 = this.userRepository.findById(id);
@@ -154,8 +162,8 @@ public class UserService {
         if(optional2.get().getStatus().equals("inactive")){
             throw new BaseException(BaseResponseStatus.INACTIVE_USER);
         }
-        Optional<FriendEntity> optionalReq = this.friendRepository.findByReqUserIdxAndResUserIdx(optional1.get(), optional2.get());
-        Optional<FriendEntity> optionalRes = this.friendRepository.findByReqUserIdxAndResUserIdx(optional2.get(), optional1.get());
+        Optional<FriendEntity> optionalReq = this.friendRepository.findByReqUserIdxAndResUserIdx(user, optional2.get());
+        Optional<FriendEntity> optionalRes = this.friendRepository.findByReqUserIdxAndResUserIdx(optional2.get(), user);
         if(!optionalReq.isEmpty()){
             if(optionalReq.get().getStatus().equals("inactive")){
                 throw new BaseException(BaseResponseStatus.EXIST_USER_REQUEST);
@@ -173,7 +181,7 @@ public class UserService {
             }
         }
         FriendEntity friendEntity = FriendEntity.builder()
-                .userEntity1(optional1.get())
+                .userEntity1(user)
                 .userEntity2(optional2.get())
                 .status("inactive")
                 .build();
@@ -185,15 +193,7 @@ public class UserService {
     }
 
     public String acceptFriend(Long friendIdx, HttpServletRequest request) throws BaseException{
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional1 = this.userRepository.findByUserIdx(userIdx);
-        if(optional1.isEmpty()){
-            throw new BaseException(BaseResponseStatus.INVALID_SESSION_INFORMATION);
-        }
+        UserEntity user = getSessionUser(request);
         Optional<FriendEntity> optional = this.friendRepository.findByFriendIdx(friendIdx);
         if(optional.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_FRIENDIDX);
@@ -208,15 +208,7 @@ public class UserService {
     }
 
     public String rejectFriend(Long friendIdx, HttpServletRequest request) throws BaseException{
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional1 = this.userRepository.findByUserIdx(userIdx);
-        if(optional1.isEmpty()){
-            throw new BaseException(BaseResponseStatus.INVALID_SESSION_INFORMATION);
-        }
+        UserEntity user = getSessionUser(request);
         Optional<FriendEntity> optional = this.friendRepository.findByFriendIdx(friendIdx);
         if(optional.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_FRIENDIDX);
@@ -230,15 +222,7 @@ public class UserService {
     }
 
     public void deleteFriend(List<Long> friendIdxList, HttpServletRequest request) throws BaseException{
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional1 = this.userRepository.findByUserIdx(userIdx);
-        if(optional1.isEmpty()){
-            throw new BaseException(BaseResponseStatus.INVALID_SESSION_INFORMATION);
-        }
+        UserEntity user = getSessionUser(request);
         for(Long temp : friendIdxList){
             Optional<FriendEntity> friendEntity = this.friendRepository.findByFriendIdx(temp);
             if(friendEntity.isEmpty()){
@@ -253,27 +237,16 @@ public class UserService {
     }
 
     public List<FriendRes.FriendInfo> getFriendList(HttpServletRequest request) throws BaseException{ //친구 신청 완료
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
-        if(optional.isEmpty()){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
-        }
-        if(optional.get().getStatus().equals("inactive")){
-            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
-        }
+        UserEntity user = getSessionUser(request);
 
-        List<FriendEntity> friendEntityList = this.friendRepository.findAllByReqUserIdxOrResUserIdx(optional.get(), optional.get());
+        List<FriendEntity> friendEntityList = this.friendRepository.findAllByReqUserIdxOrResUserIdx(user, user);
         List<FriendRes.FriendInfo> friendInfoList = new ArrayList<>();
         for(FriendEntity temp : friendEntityList){
             if(temp.getStatus().equals("active")){
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
                 friendInfo.setFriendIdx(temp.getFriendIdx());
                 friendInfo.setId(temp.getResUserIdx().getId());
-                if(friendInfo.getId().equals(optional.get().getId())){
+                if(friendInfo.getId().equals(user.getId())){
                     friendInfo.setId(temp.getReqUserIdx().getId());
                 }
                 friendInfoList.add(friendInfo);
@@ -283,20 +256,9 @@ public class UserService {
     }
 
     public List<FriendRes.FriendInfo> getReqFriendList(HttpServletRequest request) throws  BaseException{ //유저가 받은
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
-        if(optional.isEmpty()){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
-        }
-        if(optional.get().getStatus().equals("inactive")){
-            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
-        }
+        UserEntity user = getSessionUser(request);
 
-        List<FriendEntity> friendEntityList = this.friendRepository.findAllByResUserIdx(optional.get());
+        List<FriendEntity> friendEntityList = this.friendRepository.findAllByResUserIdx(user);
         List<FriendRes.FriendInfo> friendInfoList = new ArrayList<>();
         for(FriendEntity temp : friendEntityList){
             if(temp.getStatus().equals("inactive")){
@@ -310,20 +272,9 @@ public class UserService {
     }
 
     public List<FriendRes.FriendInfo> getResFriendList(HttpServletRequest request) throws  BaseException{ //유저가 보낸
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
-        if(optional.isEmpty()){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
-        }
-        if(optional.get().getStatus().equals("inactive")){
-            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
-        }
+        UserEntity user = getSessionUser(request);
 
-        List<FriendEntity> friendEntityList = this.friendRepository.findAllByReqUserIdx(optional.get());
+        List<FriendEntity> friendEntityList = this.friendRepository.findAllByReqUserIdx(user);
         List<FriendRes.FriendInfo> friendInfoList = new ArrayList<>();
         for(FriendEntity temp : friendEntityList){
             if(temp.getStatus().equals("inactive")){

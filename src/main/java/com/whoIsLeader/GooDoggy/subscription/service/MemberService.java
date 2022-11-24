@@ -10,6 +10,7 @@ import com.whoIsLeader.GooDoggy.subscription.repository.GroupRepository;
 import com.whoIsLeader.GooDoggy.subscription.repository.UserGroupRepository;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
+import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
 import org.springframework.stereotype.Service;
@@ -29,34 +30,25 @@ public class MemberService {
     private GroupRepository groupRepository;
     private UserGroupRepository userGroupRepository;
 
+    private UserService userService;
     private UserGroupService userGroupService;
 
     public MemberService(UserRepository userRepository, GroupRepository groupRepository, UserGroupService userGroupService,
-                         UserGroupRepository userGroupRepository) {
+                         UserGroupRepository userGroupRepository, UserService userService) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.userGroupRepository = userGroupRepository;
 
+        this.userService = userService;
         this.userGroupService = userGroupService;
     }
 
     public List<MemberRes.subscription> getSubscriptionList(HttpServletRequest request) throws BaseException {
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
-        if(optional.isEmpty()){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
-        }
-        if(optional.get().getStatus().equals("inactive")){
-            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
-        }
+        UserEntity user = this.userService.getSessionUser(request);
         List<GroupEntity> groupEntityList = groupRepository.findAllByStatus("active");
         List<MemberRes.subscription> subscriptionList = new ArrayList<>();
         for(GroupEntity temp : groupEntityList){
-            if(!this.userGroupRepository.findByUserIdxAndGroupIdx(optional.get(), temp).isEmpty()){
+            if(!this.userGroupRepository.findByUserIdxAndGroupIdx(user, temp).isEmpty()){
                 continue;
             }
             if(temp.getJoinNum() < temp.getTargetNum()){
@@ -92,31 +84,20 @@ public class MemberService {
     }
 
     public void joinGroupSubscription(Long groupIdx, HttpServletRequest request) throws BaseException {
-        HttpSession session = request.getSession(false);
-        if(session == null){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_SESSION);
-        }
-        Long userIdx = (Long)session.getAttribute("LOGIN_USER");
-        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
-        if(optional.isEmpty()){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX);
-        }
-        if(optional.get().getStatus().equals("inactive")){
-            throw new BaseException(BaseResponseStatus.INACTIVE_USER);
-        }
+        UserEntity user = this.userService.getSessionUser(request);
 
         Optional<GroupEntity> groupEntity = this.groupRepository.findByGroupIdx(groupIdx);
         if(groupEntity.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
         }
 
-        Optional<UserGroupEntity> optional1 = this.userGroupRepository.findByUserIdxAndGroupIdx(optional.get(), groupEntity.get());
+        Optional<UserGroupEntity> optional1 = this.userGroupRepository.findByUserIdxAndGroupIdx(user, groupEntity.get());
         if(!optional1.isEmpty()){
             throw new BaseException(BaseResponseStatus.ALREADY_JOINED);
         }
 
         UserGroupEntity userGroupEntity = UserGroupEntity.builder()
-                .userEntity(optional.get())
+                .userEntity(user)
                 .groupEntity(groupEntity.get())
                 .build();
 
