@@ -62,8 +62,8 @@ public class GroupService {
         } catch (Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
         }
-        Long groupsIdx = userGroupService.addUserGroup(user);
-        Optional<GroupEntity> optional1 = this.groupRepository.findByGroupIdx(groupsIdx);
+        Long groupIdx = userGroupService.addUserGroup(user);
+        Optional<GroupEntity> optional1 = this.groupRepository.findByGroupIdx(groupIdx);
         if(optional1.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
         }
@@ -119,39 +119,34 @@ public class GroupService {
 
     public GroupRes.paymentReport getPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
-
-        Optional<GroupEntity> groupEntity = this.groupRepository.findByGroupIdx(groupIdx);
-        if(groupEntity.isEmpty()){
+        Optional<GroupEntity> group = this.groupRepository.findByGroupIdx(groupIdx);
+        if(group.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
         }
+        return calculatePaymentReport(group.get());
+    }
+
+    public GroupRes.paymentReport calculatePaymentReport(GroupEntity group) throws BaseException{
         List<GroupRes.paymentHistory> paymentHistoryList = new ArrayList<>();
-        LocalDate nextPayment = groupEntity.get().getFirstDayOfPayment();
+        LocalDate nextPayment = group.getFirstDayOfPayment();
+        String account = group.getAccount();
+        Long price = group.getPrice();
         Long totalCost = 0L;
-        Long price = groupEntity.get().getPrice();
         Long count = 0L;
-        String account = groupEntity.get().getAccount();
-        if(groupEntity.get().getPaymentCycle() < 0){
-            while(nextPayment.isBefore(LocalDate.now())){
-                totalCost += price;
-                GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(nextPayment, totalCost, price, account);
-                paymentHistoryList.add(paymentHistory);
-                nextPayment = nextPayment.plusMonths(groupEntity.get().getPaymentCycle()*(-1));
-                count++;
-                if(paymentHistoryList.size() > 5){
-                    paymentHistoryList.remove(0);
-                }
+
+        while(nextPayment.isBefore(LocalDate.now())){
+            totalCost += price;
+            GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(nextPayment, totalCost, price, account);
+            paymentHistoryList.add(paymentHistory);
+            if(group.getPaymentCycle() < 0){
+                nextPayment = nextPayment.plusMonths(group.getPaymentCycle()*(-1));
             }
-        }
-        else{
-            while(nextPayment.isBefore(LocalDate.now())){
-                totalCost += price;
-                GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(nextPayment, totalCost, price, account);
-                paymentHistoryList.add(paymentHistory);
-                nextPayment = nextPayment.plusDays(groupEntity.get().getPaymentCycle());
-                count++;
-                if(paymentHistoryList.size() > 5){
-                    paymentHistoryList.remove(0);
-                }
+            else{
+                nextPayment = nextPayment.plusDays(group.getPaymentCycle());
+            }
+            count++;
+            if(paymentHistoryList.size() > 5){
+                paymentHistoryList.remove(0);
             }
         }
         GroupRes.paymentReport paymentReport = new GroupRes.paymentReport(paymentHistoryList, count);

@@ -1,8 +1,10 @@
 package com.whoIsLeader.GooDoggy.subscription.service;
 
+import com.whoIsLeader.GooDoggy.subscription.DTO.GroupRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalReq;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
 import com.whoIsLeader.GooDoggy.subscription.entity.Category;
+import com.whoIsLeader.GooDoggy.subscription.entity.GroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
 import com.whoIsLeader.GooDoggy.subscription.repository.PersonalRepository;
 import com.whoIsLeader.GooDoggy.user.DTO.UserReq;
@@ -89,38 +91,35 @@ public class PersonalService {
 
     public PersonalRes.paymentReport getPaymentReport(Long personalIdx, HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
-        Optional<PersonalEntity> personalEntity = this.personalRepository.findByPersonalIdx(personalIdx);
-        if(personalEntity.isEmpty()){
+        Optional<PersonalEntity> personal = this.personalRepository.findByPersonalIdx(personalIdx);
+        if(personal.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_PERSONALIDX);
         }
+
+        return calculatePaymentReport(personal.get());
+    }
+
+    public PersonalRes.paymentReport calculatePaymentReport(PersonalEntity personal) throws BaseException{
         List<PersonalRes.paymentHistory> paymentHistoryList = new ArrayList<>();
-        LocalDate nextPayment = personalEntity.get().getFirstDayOfPayment();
+        LocalDate nextPayment = personal.getFirstDayOfPayment();
+        String account = personal.getAccount();
+        Long price = personal.getPrice();
         Long totalCost = 0L;
-        Long price = personalEntity.get().getPrice();
         Long count = 0L;
-        String account = personalEntity.get().getAccount();
-        if(personalEntity.get().getPaymentCycle() < 0){
-            while(nextPayment.isBefore(LocalDate.now())){
-                totalCost += price;
-                PersonalRes.paymentHistory paymentHistory = new PersonalRes.paymentHistory(nextPayment, totalCost, price, account);
-                paymentHistoryList.add(paymentHistory);
-                nextPayment = nextPayment.plusMonths(personalEntity.get().getPaymentCycle()*(-1));
-                count++;
-                if(paymentHistoryList.size() > 5){
-                    paymentHistoryList.remove(0);
-                }
+
+        while(nextPayment.isBefore(LocalDate.now())){
+            totalCost += price;
+            PersonalRes.paymentHistory paymentHistory = new PersonalRes.paymentHistory(nextPayment, totalCost, price, account);
+            paymentHistoryList.add(paymentHistory);
+            if(personal.getPaymentCycle() < 0){
+                nextPayment = nextPayment.plusMonths(personal.getPaymentCycle()*(-1));
             }
-        }
-        else{
-            while(nextPayment.isBefore(LocalDate.now())){
-                totalCost += price;
-                PersonalRes.paymentHistory paymentHistory = new PersonalRes.paymentHistory(nextPayment, totalCost, price, account);
-                paymentHistoryList.add(paymentHistory);
-                nextPayment = nextPayment.plusDays(personalEntity.get().getPaymentCycle());
-                count++;
-                if(paymentHistoryList.size() > 5){
-                    paymentHistoryList.remove(0);
-                }
+            else{
+                nextPayment = nextPayment.plusDays(personal.getPaymentCycle());
+            }
+            count++;
+            if(paymentHistoryList.size() > 5){
+                paymentHistoryList.remove(0);
             }
         }
         PersonalRes.paymentReport paymentReport = new PersonalRes.paymentReport(paymentHistoryList, count);
