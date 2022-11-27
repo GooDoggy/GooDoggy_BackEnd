@@ -30,7 +30,7 @@ public class TotalService {
 
     public TotalRes.allSubscription getSubscriptionList(HttpServletRequest request) throws BaseException {
         TotalRes.allSubscription allSubscription = new TotalRes.allSubscription();
-        allSubscription.setPersonalSub(this.personalService.getSubscriptionList(request));
+        allSubscription.setPersonalSub(this.personalService.getUserSubList(request));
         allSubscription.setGroupSub(this.groupService.getSubscriptionList(request));
         return allSubscription;
     }

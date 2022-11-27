@@ -15,6 +15,7 @@ import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
 
 import net.bytebuddy.asm.Advice;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -60,8 +61,21 @@ public class PersonalService {
         }
     }
 
-    public List<PersonalRes.subscription> getSubscriptionList(HttpServletRequest request) throws BaseException{
+    public List<PersonalRes.subscription> getUserSubList(HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
+        return getSubscriptionList(user);
+    }
+
+    public List<PersonalRes.subscription> getOthersSubList(Long userIdx, HttpServletRequest request) throws BaseException{
+        UserEntity user = this.userService.getSessionUser(request);
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_FRIENDIDX);
+        }
+        return getSubscriptionList(optional.get());
+    }
+
+    public List<PersonalRes.subscription> getSubscriptionList(UserEntity user) throws BaseException{
         List<PersonalEntity> personalEntityList = this.personalRepository.findAllByUserIdx(user);
         List<PersonalRes.subscription> subscriptionList = new ArrayList<>();
         for(PersonalEntity temp : personalEntityList){

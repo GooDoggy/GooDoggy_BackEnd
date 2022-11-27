@@ -2,6 +2,8 @@ package com.whoIsLeader.GooDoggy.user.DTO;
 
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor
 public class FriendRes {
 
@@ -13,5 +15,26 @@ public class FriendRes {
     public static class FriendInfo {
         private Long friendIdx;
         private String id;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Setter
+    @Getter
+    public static class SubInfo {
+        private String serviceName;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Setter
+    @Getter
+    public static class BriefInfo {
+        private Long userIdx;
+        private String id;
+        private Long num;
+        private List<SubInfo> subInfoList;
     }
 }

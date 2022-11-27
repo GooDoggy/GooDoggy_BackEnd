@@ -98,4 +98,15 @@ public class FriendController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/{friendIdx}")
+    public BaseResponse<FriendRes.BriefInfo> getBriefInfo(@PathVariable Long friendIdx, HttpServletRequest request){
+        try{
+            FriendRes.BriefInfo briefInfoList = this.friendService.getBriefSubscription(friendIdx, request);
+            return new BaseResponse<>(briefInfoList);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
