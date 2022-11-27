@@ -76,9 +76,21 @@ public class GroupService {
         }
     }
 
-    public List<GroupRes.subscription> getSubscriptionList(HttpServletRequest request) throws BaseException{
+    public List<GroupRes.subscription> getUserSubList(HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
+        return getSubscriptionList(user);
+    }
 
+    public List<GroupRes.subscription> getOthersSubList(Long userIdx, HttpServletRequest request) throws BaseException{
+        UserEntity user = this.userService.getSessionUser(request);
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        if(optional.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_FRIENDIDX);
+        }
+        return getSubscriptionList(optional.get());
+    }
+
+    public List<GroupRes.subscription> getSubscriptionList(UserEntity user) throws BaseException{
         List<UserGroupEntity> userGroupEntityList = this.userGroupRepository.findAllByUserIdx(user);
         List<GroupRes.subscription> subscriptionList = new ArrayList<>();
         for(UserGroupEntity temp : userGroupEntityList){

@@ -36,7 +36,7 @@ public class GroupController {
     @GetMapping("/")
     public BaseResponse<List<GroupRes.subscription>> getSubscriptionList(HttpServletRequest request){
         try{
-            List<GroupRes.subscription> subscriptionList = this.groupService.getSubscriptionList(request);
+            List<GroupRes.subscription> subscriptionList = this.groupService.getUserSubList(request);
             return new BaseResponse<>(subscriptionList);
         } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());

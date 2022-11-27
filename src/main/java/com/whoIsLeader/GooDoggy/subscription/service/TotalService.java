@@ -31,7 +31,14 @@ public class TotalService {
     public TotalRes.allSubscription getSubscriptionList(HttpServletRequest request) throws BaseException {
         TotalRes.allSubscription allSubscription = new TotalRes.allSubscription();
         allSubscription.setPersonalSub(this.personalService.getUserSubList(request));
-        allSubscription.setGroupSub(this.groupService.getSubscriptionList(request));
+        allSubscription.setGroupSub(this.groupService.getUserSubList(request));
+        return allSubscription;
+    }
+
+    public TotalRes.allSubscription getOthersSubscriptionList(Long friendIdx, HttpServletRequest request) throws BaseException {
+        TotalRes.allSubscription allSubscription = new TotalRes.allSubscription();
+        allSubscription.setPersonalSub(this.personalService.getOthersSubList(friendIdx, request));
+        allSubscription.setGroupSub(this.groupService.getOthersSubList(friendIdx, request));
         return allSubscription;
     }
 }
