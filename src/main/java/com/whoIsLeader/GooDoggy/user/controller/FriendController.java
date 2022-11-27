@@ -1,14 +1,11 @@
 package com.whoIsLeader.GooDoggy.user.controller;
 
-import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.TotalRes;
+import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import com.whoIsLeader.GooDoggy.subscription.service.PersonalService;
 import com.whoIsLeader.GooDoggy.subscription.service.TotalService;
 import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
-import com.whoIsLeader.GooDoggy.user.repository.FriendRepository;
-import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
 import com.whoIsLeader.GooDoggy.user.service.FriendService;
-import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponse;
 import org.springframework.web.bind.annotation.*;
@@ -125,6 +122,17 @@ public class FriendController {
         try{
             TotalRes.allSubscription subscriptionList= this.totalService.getOthersSubscriptionList(friendIdx, request);
             return new BaseResponse<>(subscriptionList);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/{category}/{friendIdx}")
+    public BaseResponse<TotalRes.allSubscription> getCategorizedList(@PathVariable Category category, @PathVariable Long friendIdx, HttpServletRequest request){
+        try{
+            TotalRes.allSubscription subscriptionList= this.totalService.getOthersSubscriptionList(friendIdx, request);
+            return new BaseResponse<>(this.totalService.getCategorizedList(category, subscriptionList));
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
