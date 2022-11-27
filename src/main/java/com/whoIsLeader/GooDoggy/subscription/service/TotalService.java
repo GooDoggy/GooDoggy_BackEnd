@@ -1,8 +1,10 @@
 package com.whoIsLeader.GooDoggy.subscription.service;
 
 import com.whoIsLeader.GooDoggy.subscription.DTO.GroupRes;
+import com.whoIsLeader.GooDoggy.subscription.DTO.MemberRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.TotalRes;
+import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
 import com.whoIsLeader.GooDoggy.subscription.repository.PersonalRepository;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
@@ -40,5 +42,23 @@ public class TotalService {
         allSubscription.setPersonalSub(this.personalService.getOthersSubList(friendIdx, request));
         allSubscription.setGroupSub(this.groupService.getOthersSubList(friendIdx, request));
         return allSubscription;
+    }
+
+    public TotalRes.allSubscription getCategorizedList(Category category, TotalRes.allSubscription subList) throws BaseException {
+        List<PersonalRes.subscription> personalSubList = new ArrayList<>();
+        for(PersonalRes.subscription temp : subList.getPersonalSub()){
+            if(temp.getCategory().equals(category)) {
+                personalSubList.add(temp);
+            }
+        }
+        List<GroupRes.subscription> groupSubList = new ArrayList<>();
+        for(GroupRes.subscription temp : subList.getGroupSub()){
+            if(temp.getCategory().equals(category)) {
+                groupSubList.add(temp);
+            }
+        }
+        subList.setPersonalSub(personalSubList);
+        subList.setGroupSub(groupSubList);
+        return subList;
     }
 }

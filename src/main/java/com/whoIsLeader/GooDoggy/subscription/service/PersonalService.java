@@ -66,9 +66,9 @@ public class PersonalService {
         return getSubscriptionList(user);
     }
 
-    public List<PersonalRes.subscription> getOthersSubList(Long userIdx, HttpServletRequest request) throws BaseException{
+    public List<PersonalRes.subscription> getOthersSubList(Long friendIdx, HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
-        Optional<UserEntity> optional = this.userRepository.findByUserIdx(userIdx);
+        Optional<UserEntity> optional = this.userRepository.findByUserIdx(friendIdx);
         if(optional.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_FRIENDIDX);
         }
