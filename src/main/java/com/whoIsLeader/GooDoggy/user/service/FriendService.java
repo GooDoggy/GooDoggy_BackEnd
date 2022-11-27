@@ -1,5 +1,7 @@
 package com.whoIsLeader.GooDoggy.user.service;
 
+import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
+import com.whoIsLeader.GooDoggy.subscription.service.PersonalService;
 import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
 import com.whoIsLeader.GooDoggy.user.entity.FriendEntity;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
@@ -8,6 +10,7 @@ import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -21,12 +24,14 @@ public class FriendService {
     private FriendRepository friendRepository;
 
     private UserService userService;
+    private PersonalService personalService;
 
-    public FriendService(UserRepository userRepository, FriendRepository friendRepository, UserService userService){
+    public FriendService(UserRepository userRepository, FriendRepository friendRepository, UserService userService, PersonalService personalService){
         this.userRepository = userRepository;
         this.friendRepository = friendRepository;
 
         this.userService = userService;
+        this.personalService = personalService;
     }
 
     public void requestFriend(String id, HttpServletRequest request) throws BaseException {
@@ -164,5 +169,22 @@ public class FriendService {
             }
         }
         return friendInfoList;
+    }
+
+    public FriendRes.BriefInfo getBriefSubscription(Long friendIdx, HttpServletRequest request) throws  BaseException{
+        List<PersonalRes.subscription> subscriptionList = this.personalService.getOthersSubList(friendIdx, request);
+        int count = subscriptionList.size();
+        List<FriendRes.SubInfo> subInfoList= new ArrayList<>();
+        for(int i = count - 1; (i >= 0) && (i >= count - 3); i--) {
+            FriendRes.SubInfo subInfo = new FriendRes.SubInfo();
+            subInfo.setServiceName(subscriptionList.get(i).getServiceName());
+            subInfoList.add(subInfo);
+        }
+        FriendRes.BriefInfo briefInfo = new FriendRes.BriefInfo();
+        briefInfo.setUserIdx(friendIdx);
+        briefInfo.setId(this.userRepository.findByUserIdx(friendIdx).get().getId());
+        briefInfo.setNum(Long.valueOf(count));
+        briefInfo.setSubInfoList(subInfoList);
+        return briefInfo;
     }
 }

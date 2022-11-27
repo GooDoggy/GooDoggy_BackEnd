@@ -37,7 +37,7 @@ public class PersonalController {
     @GetMapping("/")
     public BaseResponse<List<PersonalRes.subscription>> getSubscriptionList(HttpServletRequest request){
         try{
-            List<PersonalRes.subscription> subscriptionList = this.personalService.getSubscriptionList(request);
+            List<PersonalRes.subscription> subscriptionList = this.personalService.getUserSubList(request);
             return new BaseResponse<>(subscriptionList);
         } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
