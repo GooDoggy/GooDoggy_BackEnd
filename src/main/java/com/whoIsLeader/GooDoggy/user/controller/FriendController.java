@@ -1,5 +1,9 @@
 package com.whoIsLeader.GooDoggy.user.controller;
 
+import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
+import com.whoIsLeader.GooDoggy.subscription.DTO.TotalRes;
+import com.whoIsLeader.GooDoggy.subscription.service.PersonalService;
+import com.whoIsLeader.GooDoggy.subscription.service.TotalService;
 import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
 import com.whoIsLeader.GooDoggy.user.repository.FriendRepository;
 import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
@@ -17,9 +21,14 @@ import java.util.List;
 public class FriendController {
 
     private FriendService friendService;
+    private PersonalService personalService;
+    private TotalService totalService;
 
-    public FriendController(FriendService friendService){
+    public FriendController(FriendService friendService, PersonalService personalService, TotalService totalService){
+
         this.friendService = friendService;
+        this.personalService = personalService;
+        this.totalService = totalService;
     }
 
     @ResponseBody
@@ -105,6 +114,17 @@ public class FriendController {
         try{
             FriendRes.BriefInfo briefInfoList = this.friendService.getBriefSubscription(friendIdx, request);
             return new BaseResponse<>(briefInfoList);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/subscriptions/{friendIdx}")
+    public BaseResponse<TotalRes.allSubscription> getSubscriptionList(@PathVariable Long friendIdx, HttpServletRequest request){
+        try{
+            TotalRes.allSubscription subscriptionList= this.totalService.getOthersSubscriptionList(friendIdx, request);
+            return new BaseResponse<>(subscriptionList);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
