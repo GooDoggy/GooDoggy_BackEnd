@@ -40,6 +40,7 @@ public class PersonalRes {
     }
 
     @Getter
+    @Setter
     @AllArgsConstructor
     @Builder
     public static class paymentReport{
