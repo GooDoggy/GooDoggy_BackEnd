@@ -65,4 +65,15 @@ public class PersonalController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/{personalIdx}")
+    public BaseResponse<PersonalRes.personalDetails> getDetails(@PathVariable Long personalIdx, HttpServletRequest request){
+        try{
+            PersonalRes.personalDetails personalDetails = this.personalService.getDetails(personalIdx,request);
+            return new BaseResponse<>(personalDetails);
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

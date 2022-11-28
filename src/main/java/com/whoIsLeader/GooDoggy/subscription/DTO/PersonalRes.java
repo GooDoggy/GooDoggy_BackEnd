@@ -46,4 +46,19 @@ public class PersonalRes {
         private List<paymentHistory> paymentHistoryList;
         private Long count;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class personalDetails {
+        private Long personalIdx;
+        private String serviceName;
+        private String planName;
+        private Long price;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate firstDayOfPayment;
+        private Long paymentCycle;
+        private Category category;
+        private String account;
+    }
 }
