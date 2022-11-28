@@ -38,6 +38,7 @@ public class GroupRes {
     }
 
     @Getter
+    @Setter
     @AllArgsConstructor
     @Builder
     public static class paymentReport{
