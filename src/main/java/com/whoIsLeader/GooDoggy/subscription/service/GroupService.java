@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -165,5 +166,18 @@ public class GroupService {
         }
         GroupRes.paymentReport paymentReport = new GroupRes.paymentReport(paymentHistoryList, count);
         return paymentReport;
+    }
+
+    public GroupRes.groupDetails groupDetails(Long groupIdx, HttpServletRequest request) throws BaseException{
+        UserEntity user = this.userService.getSessionUser(request);
+        Optional<GroupEntity> group = this.groupRepository.findByGroupIdx(groupIdx);
+        if(group.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
+        }
+        GroupRes.groupDetails groupDetails = new GroupRes.groupDetails(groupIdx,group.get().getServiceName(),group.get().getPlanName(),
+                group.get().getPrice(),group.get().getFirstDayOfPayment(),group.get().getLastDayOfPayment(),group.get().getPaymentCycle(),
+                group.get().getCategory(),group.get().getAccount(),group.get().getTargetNum(),group.get().getContents(),group.get().getPhone());
+
+        return groupDetails;
     }
 }
