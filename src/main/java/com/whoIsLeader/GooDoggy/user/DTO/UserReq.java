@@ -43,4 +43,11 @@ public class UserReq {
         private String newPassword;
         private String newPassword_check;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class GetProfileImg{
+        private String profileimg;
+    }
 }

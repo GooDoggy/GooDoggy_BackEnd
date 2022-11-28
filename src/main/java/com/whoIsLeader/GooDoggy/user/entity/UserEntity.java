@@ -50,6 +50,9 @@ public class UserEntity extends BaseEntity {
 //    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userIdx", orphanRemoval = true)
 //    private List<UserGroupEntity> userGroupEntityList = new ArrayList<>();
 
+    @Column(columnDefinition = "varchar(200) default 'https://storage.googleapis.com/goodoggy_bucket/goodoggy.jpg'") //기본 이미지
+    private String profileimg;
+
     @Builder
     public UserEntity(String name, String email, String id, String password, String profileImgUrl, String status,
                       List<PersonalEntity> personalEntityList){
@@ -65,4 +68,5 @@ public class UserEntity extends BaseEntity {
     public void changePw(String newPassword){
         this.password = newPassword;
     }
+    public void changeProfileimg(String newProfileimg){this.profileimg = newProfileimg;}
 }
