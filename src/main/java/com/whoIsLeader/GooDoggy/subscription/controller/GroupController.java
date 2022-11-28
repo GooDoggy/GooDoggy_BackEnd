@@ -9,6 +9,7 @@ import com.whoIsLeader.GooDoggy.util.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.*;
 import java.util.List;
 
 @RestController
@@ -49,6 +50,17 @@ public class GroupController {
         try{
             GroupRes.paymentReport paymentReport = this.groupService.getPaymentReport(groupIdx, request);
             return new BaseResponse<>(paymentReport);
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/{groupIdx}")
+    public BaseResponse<GroupRes.groupDetails> getGroupDetails(@PathVariable Long groupIdx, HttpServletRequest request){
+        try{
+            GroupRes.groupDetails groupDetails = this.groupService.groupDetails(groupIdx, request);
+            return new BaseResponse<>(groupDetails);
         } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
