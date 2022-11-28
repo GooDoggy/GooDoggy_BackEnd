@@ -59,12 +59,15 @@ public class GroupEntity extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String contents;
 
+    @Column(nullable = false, length = 11)
+    private String phone;
+
     @Column(columnDefinition = "varchar(12) default 'half-active'")
     private String status;
 
     @Builder
     public GroupEntity(String serviceName, String planName, Long price, LocalDate firstDayOfPayment, LocalDate lastDayOfPayment,
-                        Long paymentCycle, Category category, String account, Long joinNum, Long targetNum, String contents, String status){
+                        Long paymentCycle, Category category, String account, Long joinNum, Long targetNum, String contents, String phone, String status){
         this.serviceName = serviceName;
         this.planName = planName;
         this.price = price;
@@ -76,6 +79,7 @@ public class GroupEntity extends BaseEntity {
         this.joinNum = joinNum;
         this.targetNum = targetNum;
         this.contents = contents;
+        this.phone = phone;
         this.status = status;
     }
 
