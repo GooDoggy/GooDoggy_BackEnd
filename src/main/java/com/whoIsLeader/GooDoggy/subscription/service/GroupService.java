@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -132,13 +133,25 @@ public class GroupService {
         return true;
     }
 
-    public GroupRes.paymentReport getPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
+    public GroupRes.paymentReport getAllPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
         Optional<GroupEntity> group = this.groupRepository.findByGroupIdx(groupIdx);
         if(group.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
         }
         return calculatePaymentReport(group.get());
+    }
+
+    public GroupRes.paymentReport getPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
+        GroupRes.paymentReport paymentReport = getAllPaymentReport(groupIdx, request);
+        if(paymentReport.getPaymentHistoryList().size() > 3){
+            List<GroupRes.paymentHistory> paymentHistoryList = new ArrayList<>();
+            for(int i = 0; i < 3; i++){
+                paymentHistoryList.add(paymentReport.getPaymentHistoryList().get(i));
+            }
+            paymentReport.setPaymentHistoryList(paymentHistoryList);
+        }
+        return paymentReport;
     }
 
     public GroupRes.paymentReport calculatePaymentReport(GroupEntity group) throws BaseException{
@@ -160,10 +173,8 @@ public class GroupService {
                 nextPayment = nextPayment.plusDays(group.getPaymentCycle());
             }
             count++;
-            if(paymentHistoryList.size() > 5){
-                paymentHistoryList.remove(0);
-            }
         }
+        Collections.reverse(paymentHistoryList);
         GroupRes.paymentReport paymentReport = new GroupRes.paymentReport(paymentHistoryList, count);
         return paymentReport;
     }
