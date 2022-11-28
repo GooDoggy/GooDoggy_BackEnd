@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,14 +104,25 @@ public class PersonalService {
         return subscriptionList;
     }
 
-    public PersonalRes.paymentReport getPaymentReport(Long personalIdx, HttpServletRequest request) throws BaseException{
+    public PersonalRes.paymentReport getAllPaymentReport(Long personalIdx, HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
         Optional<PersonalEntity> personal = this.personalRepository.findByPersonalIdx(personalIdx);
         if(personal.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_PERSONALIDX);
         }
-
         return calculatePaymentReport(personal.get());
+    }
+
+    public PersonalRes.paymentReport getPaymentReport(Long personalIdx, HttpServletRequest request) throws BaseException{
+        PersonalRes.paymentReport paymentReport = getAllPaymentReport(personalIdx, request);
+        if(paymentReport.getPaymentHistoryList().size() > 3){
+            List<PersonalRes.paymentHistory> paymentHistoryList = new ArrayList<>();
+            for(int i = 0; i < 3; i++){
+                paymentHistoryList.add(paymentReport.getPaymentHistoryList().get(i));
+            }
+            paymentReport.setPaymentHistoryList(paymentHistoryList);
+        }
+        return paymentReport;
     }
 
     public PersonalRes.paymentReport calculatePaymentReport(PersonalEntity personal) throws BaseException{
@@ -132,10 +144,8 @@ public class PersonalService {
                 nextPayment = nextPayment.plusDays(personal.getPaymentCycle());
             }
             count++;
-            if(paymentHistoryList.size() > 5){
-                paymentHistoryList.remove(0);
-            }
         }
+        Collections.reverse(paymentHistoryList);
         PersonalRes.paymentReport paymentReport = new PersonalRes.paymentReport(paymentHistoryList, count);
         return paymentReport;
     }
