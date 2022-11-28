@@ -156,4 +156,17 @@ public class PersonalService {
             }
         }
     }
+
+    public PersonalRes.personalDetails getDetails(Long personalIdx, HttpServletRequest request) throws BaseException{
+        UserEntity user = this.userService.getSessionUser(request);
+        Optional<PersonalEntity> personal = this.personalRepository.findByPersonalIdx(personalIdx);
+        if(personal.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_PERSONALIDX);
+        }
+        PersonalRes.personalDetails personalDetails = new PersonalRes.personalDetails(personalIdx,personal.get().getServiceName(),
+                personal.get().getPlanName(),personal.get().getPrice(),personal.get().getFirstDayOfPayment(),personal.get().getPaymentCycle(),
+                personal.get().getCategory(),personal.get().getAccount());
+
+        return personalDetails;
+    }
 }
