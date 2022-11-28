@@ -8,6 +8,7 @@ import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
 import com.whoIsLeader.GooDoggy.subscription.entity.UserGroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.repository.GroupRepository;
 import com.whoIsLeader.GooDoggy.subscription.repository.UserGroupRepository;
+import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
@@ -56,6 +57,7 @@ public class GroupService {
                 .joinNum(1L)
                 .targetNum(subInfo.getNum())
                 .contents(subInfo.getContents())
+                .phone(subInfo.getPhone())
                 .build();
         try{
             this.groupRepository.save(groupEntity);

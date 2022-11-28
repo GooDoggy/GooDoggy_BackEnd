@@ -28,5 +28,6 @@ public class GroupReq {
         private String account;
         private Long num;
         private String contents;
+        private String phone;
     }
 }
