@@ -17,6 +17,7 @@ public enum BaseResponseStatus {
     INVALID_FRIEND_REQUEST(false, 2022, "본 계정으로의 친구 신청은 불가합니다."),
     INVALID_NAME_EMAIL(false, 2023, "이름과 이메일이 일치하는 유저 정보가 없습니다."),
     INVALID_NAME_ID(false, 2024, "이름과 아이디가 일치하는 유저 정보가 없습니다."),
+    INVALID_LEADER_ACTION(false, 2052, "그룹장은 그룹을 탈퇴할 수 없습니다."),
 
     NON_EXIST_ID(false, 2030, "아이디가 존재하지 않습니다."),
     NON_EXIST_SESSION(false, 2031, "유저 세션이 존재하지 않습니다."),
@@ -26,6 +27,7 @@ public enum BaseResponseStatus {
     NON_EXIST_STATUS(false, 2035, "해당 상태를 갖는 데이터가 존재하지 않습니다."),
     NON_EXIST_GROUPIDX(false, 2036, "해당 다인 구독 인덱스를 갖는 데이터가 존재하지 않습니다."),
     NON_EXIST_MEMBER(false, 2037, "다인 구독 게시글이 존재하지 않습니다."),
+    NON_EXIST_USERIDX_GROUPIDX(false, 2038, "해당 유저는 해당 그룹에 참여하고 있지 않습니다."),
 
     EXIST_USER_REQUEST(false, 2040, "유저에게 보낸 친구 요청이 수락 대기 상태입니다."),
     EXIST_FRIEND_REQUEST(false, 2041, "유저로부터 받은 친구 요청이 수락 대기 상태입니다."),
