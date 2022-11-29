@@ -179,4 +179,8 @@ public class PersonalService {
 
         return personalDetails;
     }
+
+    public List<PersonalEntity> getPersonalList(UserEntity user){
+        return this.personalRepository.findAllByUserIdx(user);
+    }
 }

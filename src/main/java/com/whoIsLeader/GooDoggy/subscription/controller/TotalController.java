@@ -30,4 +30,15 @@ public class TotalController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/calender")
+    public BaseResponse<TotalRes.calender> getCalender(HttpServletRequest request) {
+        try {
+            TotalRes.calender result = this.totalService.getCalender(request);
+            return new BaseResponse<>(result);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
