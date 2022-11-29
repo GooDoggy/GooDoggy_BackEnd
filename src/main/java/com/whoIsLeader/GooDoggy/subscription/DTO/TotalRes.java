@@ -5,6 +5,7 @@ import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 
 @NoArgsConstructor
@@ -18,5 +19,14 @@ public class TotalRes {
     public static class allSubscription {
         private List<PersonalRes.subscription> personalSub;
         private List<GroupRes.subscription> groupSub;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class calender{
+        private int year;
+        private int month;
+        private HashSet<Integer> dateList;
     }
 }

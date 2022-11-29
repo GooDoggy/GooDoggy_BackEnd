@@ -191,4 +191,17 @@ public class GroupService {
 
         return groupDetails;
     }
+
+    public List<GroupEntity> getGroupList(UserEntity user) throws BaseException{
+        List<UserGroupEntity> userGroup = this.userGroupRepository.findAllByUserIdx(user);
+        List<GroupEntity> group = new ArrayList<>();
+        for(UserGroupEntity temp : userGroup){
+            Optional<GroupEntity> optional = this.groupRepository.findByGroupIdx(temp.getGroupIdx().getGroupIdx());
+            if(optional.isEmpty()){
+                throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
+            }
+            group.add(optional.get());
+        }
+        return group;
+    }
 }
