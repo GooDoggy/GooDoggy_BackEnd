@@ -8,6 +8,7 @@ import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
 import com.whoIsLeader.GooDoggy.subscription.entity.UserGroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.repository.GroupRepository;
 import com.whoIsLeader.GooDoggy.subscription.repository.UserGroupRepository;
+import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
@@ -17,8 +18,10 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +59,7 @@ public class GroupService {
                 .joinNum(1L)
                 .targetNum(subInfo.getNum())
                 .contents(subInfo.getContents())
+                .phone(subInfo.getPhone())
                 .build();
         try{
             this.groupRepository.save(groupEntity);
@@ -129,13 +133,25 @@ public class GroupService {
         return true;
     }
 
-    public GroupRes.paymentReport getPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
+    public GroupRes.paymentReport getAllPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
         Optional<GroupEntity> group = this.groupRepository.findByGroupIdx(groupIdx);
         if(group.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
         }
         return calculatePaymentReport(group.get());
+    }
+
+    public GroupRes.paymentReport getPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
+        GroupRes.paymentReport paymentReport = getAllPaymentReport(groupIdx, request);
+        if(paymentReport.getPaymentHistoryList().size() > 3){
+            List<GroupRes.paymentHistory> paymentHistoryList = new ArrayList<>();
+            for(int i = 0; i < 3; i++){
+                paymentHistoryList.add(paymentReport.getPaymentHistoryList().get(i));
+            }
+            paymentReport.setPaymentHistoryList(paymentHistoryList);
+        }
+        return paymentReport;
     }
 
     public GroupRes.paymentReport calculatePaymentReport(GroupEntity group) throws BaseException{
@@ -157,11 +173,35 @@ public class GroupService {
                 nextPayment = nextPayment.plusDays(group.getPaymentCycle());
             }
             count++;
-            if(paymentHistoryList.size() > 5){
-                paymentHistoryList.remove(0);
-            }
         }
+        Collections.reverse(paymentHistoryList);
         GroupRes.paymentReport paymentReport = new GroupRes.paymentReport(paymentHistoryList, count);
         return paymentReport;
+    }
+
+    public GroupRes.groupDetails groupDetails(Long groupIdx, HttpServletRequest request) throws BaseException{
+        UserEntity user = this.userService.getSessionUser(request);
+        Optional<GroupEntity> group = this.groupRepository.findByGroupIdx(groupIdx);
+        if(group.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
+        }
+        GroupRes.groupDetails groupDetails = new GroupRes.groupDetails(groupIdx,group.get().getServiceName(),group.get().getPlanName(),
+                group.get().getPrice(),group.get().getFirstDayOfPayment(),group.get().getLastDayOfPayment(),group.get().getPaymentCycle(),
+                group.get().getCategory(),group.get().getAccount(),group.get().getTargetNum(),group.get().getContents(),group.get().getPhone());
+
+        return groupDetails;
+    }
+
+    public List<GroupEntity> getGroupList(UserEntity user) throws BaseException{
+        List<UserGroupEntity> userGroup = this.userGroupRepository.findAllByUserIdx(user);
+        List<GroupEntity> group = new ArrayList<>();
+        for(UserGroupEntity temp : userGroup){
+            Optional<GroupEntity> optional = this.groupRepository.findByGroupIdx(temp.getGroupIdx().getGroupIdx());
+            if(optional.isEmpty()){
+                throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
+            }
+            group.add(optional.get());
+        }
+        return group;
     }
 }

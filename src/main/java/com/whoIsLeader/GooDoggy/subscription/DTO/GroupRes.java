@@ -38,10 +38,31 @@ public class GroupRes {
     }
 
     @Getter
+    @Setter
     @AllArgsConstructor
     @Builder
     public static class paymentReport{
         private List<GroupRes.paymentHistory> paymentHistoryList;
         private Long count;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class groupDetails {
+        private Long groupIdx;
+        private String serviceName;
+        private String planName;
+        private Long price;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate firstDayOfPayment;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate lastDayOfPayment;
+        private Long paymentCycle;
+        private Category category;
+        private String account;
+        private Long targetNum;
+        private String contents;
+        private String phone;
     }
 }

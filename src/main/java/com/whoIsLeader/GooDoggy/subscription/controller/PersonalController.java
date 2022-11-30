@@ -1,6 +1,7 @@
 package com.whoIsLeader.GooDoggy.subscription.controller;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
+import com.whoIsLeader.GooDoggy.subscription.DTO.GroupRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalReq;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
 import com.whoIsLeader.GooDoggy.subscription.service.PersonalService;
@@ -61,6 +62,28 @@ public class PersonalController {
         try{
             this.personalService.inactiveSubscriptions(personalIdxList, request);
             return new BaseResponse<>("개인 구독이 삭제되었습니다.");
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/{personalIdx}")
+    public BaseResponse<PersonalRes.personalDetails> getDetails(@PathVariable Long personalIdx, HttpServletRequest request){
+        try{
+            PersonalRes.personalDetails personalDetails = this.personalService.getDetails(personalIdx,request);
+            return new BaseResponse<>(personalDetails);
+        } catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/{personalIdx}/payment")
+    public BaseResponse<PersonalRes.paymentReport> getAllPaymentReport(@PathVariable Long personalIdx, HttpServletRequest request){
+        try{
+            PersonalRes.paymentReport paymentReport= this.personalService.getAllPaymentReport(personalIdx, request);
+            return new BaseResponse<>(paymentReport);
         } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
