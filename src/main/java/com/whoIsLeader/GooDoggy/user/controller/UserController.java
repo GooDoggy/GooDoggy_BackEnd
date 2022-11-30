@@ -2,6 +2,7 @@ package com.whoIsLeader.GooDoggy.user.controller;
 
 import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
 import com.whoIsLeader.GooDoggy.user.DTO.UserReq;
+import com.whoIsLeader.GooDoggy.user.DTO.UserRes;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
