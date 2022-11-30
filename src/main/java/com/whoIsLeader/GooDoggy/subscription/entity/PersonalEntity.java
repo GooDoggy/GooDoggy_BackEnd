@@ -53,6 +53,8 @@ public class PersonalEntity extends BaseEntity {
     @Column(columnDefinition = "varchar(10) default 'active'")
     private String status;
 
+    @Column(columnDefinition = "varchar(200) default 'https://storage.googleapis.com/goodoggy_bucket/goodoggy.jpg'") //기본 이미지
+    private String profileimg;
     @Builder
     public PersonalEntity(UserEntity userEntity, String serviceName, String planName,
                           Long price, LocalDate firstDayOfPayment, Long paymentCycle, Category category, String account, String status){

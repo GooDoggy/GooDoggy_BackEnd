@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "marine-resource-369813",
+  "private_key_id": "bd9582cfbae3a5fa0278e83cbe9a7375263f80fa",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCVqKH/N8QKlGdF\ne1jkzHyctQVIVkhjCxJMY0GH1chUKiAsBzLVmiW7Juh/v/vq00+MorHUbj7xUvTi\n+Hh8SvQbjtOG7bmoi66r0dYWHjEN/sCF/viQ+u0eThUyxu4vSWhR27IO5/Btb7EU\nCaRglBulY3oZO5AwJ/tw3Emn/ujZhx4719KsqBFeRD99bOAAZx6ucMMOTg0Hhu1J\nzyZ682d4EokzrpyJ4jk5LXcG5XlphyOgGwg9HVgKzsEgYGGZV6hKbGJh6vcCCpEh\nvomp5ejtNzAdxIB51wN4TF/J4Qu/a2JqitfHuw+p+ZioDGAtqqILHriyNcop5ppV\n+BK6C5aRAgMBAAECggEABaeOSLJ73ZB3icMG0UzpRRHRMMdTIIGJv/QcxOaZapYA\nNYRSHIr186kdLhJ8ELEfjNHq2SVkixarelXmq3+OKJUQE0WGdxf2p2GcGVArt0/R\nngkhAs1QSeMBCbRFdJOX9ZvQ5vTxexkLaOqSWN8lCkMvblD3T4fQiBZH/Ckf9XQG\n2lYsbyIt65l6NB9O6wSpGczvJk6Gp0+4EKmsifR6BRvI11IcuYvC50TNKbe8PSDE\nGAd2QjERYa+F9sRybTo/CkEB+M5ZSDtr+u/tWB4+tcdko17sFrS/xKe8Akiz4aVl\nbqMW0GOc6F6isSatVX4qH5afI7Dg4m8SgzciSrvP4QKBgQDHk2ETn65qc/xNfLth\n2xUidVuC3kA4iAm06V+//MtCI0maIYztjMAEOzRvyIwH2z0QGQUk5t9uWJPGl+vx\nUeVsOcRN2pWv2KVvE+U1z0NclAPrvICwThjLuxkEff70RzDozxo2T+hFlxJCn+yp\nCdvLSz86uInCnClTxRcpJMtp+QKBgQC/+G4NF6EhkhG5AnvvUbvFWLK6ufgxLsro\n+Lb08eDP9dhuAA+nwLBeEUjiLYZ49kcOHwFABf+DGCBx3JXhiYa2NxOcwiksxdSy\n184ZLZNRDehbB1AsBAZ4Po2Pkrts82I3/QQ8aS9FhJ+Uf6sdfcVVJY/YKgUoRwLG\nByL1Ndl3WQKBgQCQ9yiojHCwupcl4dhqeCyd3wkdwjp71bTXSD1Yw1MRM3ifEIfB\ndV90s1yfZdjxS/rK2qG18E2TZZvRwUCNBaPUPRGuS3w3QvLIAHeZ4ndXo9xFO6Nu\nbQvt0HWXob2zypJoSScNFHXvNpD4/Bl3n8WboYjIKotGZRBP3PW52RQ4YQKBgQC2\n6pKCKxe/kx0L+k/5ExolyoRS48yXoIx7PDGoZ6jcvtZAyhIgt7vVhga6bMKLE69U\nxzo7tPtoAF853wN5ab9QdF5dqavuG3q2Bmc9Gm4ad3QE+Iztw9AeVwwv15J7F9Vo\nn8+feGIwjVQ4/QUhDqwum6HaSP+tByyfYEFxAKR70QKBgQCuiFU3l7UjQE//pIKK\nRY7n8cqa0xHYB2QwhQRwursHvow4nLsXSPn1pmP7SqG5YhyTqflQ1UUK45ANtWVe\nPZnWLVZKPo0j5B5mfJM/ObLtku9l2qnAJM+n+7qm4UG36CUDWU2k/PX5Nua7xNs9\naFiC6AWut8KaxuwDMEwfev4hjw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "godoggy-bucket-access@marine-resource-369813.iam.gserviceaccount.com",
+  "client_id": "101234622686442218697",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/godoggy-bucket-access%40marine-resource-369813.iam.gserviceaccount.com"
+}

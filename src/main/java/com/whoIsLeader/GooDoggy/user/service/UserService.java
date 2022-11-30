@@ -153,4 +153,9 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.DATABASE_PATCH_ERROR);
         }
     }
+
+    public String getProfileimg(HttpServletRequest request) throws BaseException{
+        UserEntity user = this.getSessionUser(request);
+        return user.getProfileimg();
+    }
 }

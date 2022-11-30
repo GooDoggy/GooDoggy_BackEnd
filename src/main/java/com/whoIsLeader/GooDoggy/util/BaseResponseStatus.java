@@ -17,6 +17,10 @@ public enum BaseResponseStatus {
     INVALID_FRIEND_REQUEST(false, 2022, "본 계정으로의 친구 신청은 불가합니다."),
     INVALID_NAME_EMAIL(false, 2023, "이름과 이메일이 일치하는 유저 정보가 없습니다."),
     INVALID_NAME_ID(false, 2024, "이름과 아이디가 일치하는 유저 정보가 없습니다."),
+    FILENAME_NULL(false, 2025, "파일 이름이 null입니다."),
+    FAILED_CONVERT(false, 2026, "파일 변환에 실패하였습니다."),
+    INVALID_FILE_EXTENSION(false, 2027, "파일 확장자가 잘못되었습니다."),
+    ERROR_STORING_TO_GCS(false, 2028, "GCS에 데이터를 저장하는 데에 실패하였습니다."),
     INVALID_LEADER_ACTION(false, 2052, "그룹장은 그룹을 탈퇴할 수 없습니다."),
 
     NON_EXIST_ID(false, 2030, "아이디가 존재하지 않습니다."),
