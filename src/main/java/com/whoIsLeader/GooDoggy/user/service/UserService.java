@@ -1,8 +1,11 @@
 package com.whoIsLeader.GooDoggy.user.service;
 
+import com.whoIsLeader.GooDoggy.subscription.DTO.TotalRes;
 import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
+import com.whoIsLeader.GooDoggy.subscription.service.TotalService;
 import com.whoIsLeader.GooDoggy.user.DTO.FriendRes;
 import com.whoIsLeader.GooDoggy.user.DTO.UserReq;
+import com.whoIsLeader.GooDoggy.user.DTO.UserRes;
 import com.whoIsLeader.GooDoggy.user.entity.FriendEntity;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.repository.FriendRepository;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

@@ -8,6 +8,7 @@ import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import com.whoIsLeader.GooDoggy.subscription.entity.GroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
 import com.whoIsLeader.GooDoggy.subscription.repository.PersonalRepository;
+import com.whoIsLeader.GooDoggy.user.DTO.UserRes;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
@@ -116,5 +117,36 @@ public class TotalService {
         }
         HashSet<Integer> finalDateList = new HashSet<>(dateList);
         return new TotalRes.calender(year, month, finalDateList);
+    }
+
+    public UserRes.mainInfo getMainInfo(HttpServletRequest request) throws BaseException{
+        UserEntity user = this.userService.getSessionUser(request);
+        UserRes.userInfo userInfo = new UserRes.userInfo(user.getUserIdx(), user.getId(), user.getProfileImgUrl());
+        TotalRes.calender calender = getCalender(request);
+        UserRes.randomInfo randomInfo = new UserRes.randomInfo();
+        if(calender.getDateList().contains(LocalDate.now().getDayOfMonth())){
+            randomInfo.setString1("오늘은");
+            randomInfo.setString2("넷플릭스");
+            randomInfo.setString3("결제일입니다");
+        }
+        else{
+            int num = (int)(Math.random()*2);
+            if(num == 0){
+                randomInfo.setString1("다음 결제일은");
+                randomInfo.setString2("3일 뒤");
+                randomInfo.setString3("입니다");
+            }
+            else if(num == 1){
+                randomInfo.setString1("요즘 인기있는");
+                randomInfo.setString2("디즈니 플러스");
+                randomInfo.setString3("추천드려요");
+            }
+            else{
+                randomInfo.setString1("음악 감상 1위");
+                randomInfo.setString2("멜론");
+                randomInfo.setString3("은 어떠신가요");
+            }
+        }
+        return new UserRes.mainInfo(randomInfo, userInfo, calender);
     }
 }

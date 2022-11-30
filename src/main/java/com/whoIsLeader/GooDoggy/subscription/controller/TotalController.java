@@ -4,6 +4,7 @@ import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalReq;
 import com.whoIsLeader.GooDoggy.subscription.DTO.TotalRes;
 import com.whoIsLeader.GooDoggy.subscription.service.PersonalService;
 import com.whoIsLeader.GooDoggy.subscription.service.TotalService;
+import com.whoIsLeader.GooDoggy.user.DTO.UserRes;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponse;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,17 @@ public class TotalController {
         try {
             TotalRes.calender result = this.totalService.getCalender(request);
             return new BaseResponse<>(result);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/main")
+    public BaseResponse<UserRes.mainInfo> getMain(HttpServletRequest request) {
+        try {
+            UserRes.mainInfo mainInfo = this.totalService.getMainInfo(request);
+            return new BaseResponse<>(mainInfo);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
