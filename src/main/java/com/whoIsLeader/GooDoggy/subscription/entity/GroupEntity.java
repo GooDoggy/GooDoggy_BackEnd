@@ -65,6 +65,9 @@ public class GroupEntity extends BaseEntity {
     @Column(columnDefinition = "varchar(12) default 'half-active'")
     private String status;
 
+    @Column(columnDefinition = "varchar(200) default 'https://storage.googleapis.com/goodoggy_bucket/goodoggy.jpg'") //기본 이미지
+    private String profileimg;
+
     @Builder
     public GroupEntity(String serviceName, String planName, Long price, LocalDate firstDayOfPayment, LocalDate lastDayOfPayment,
                         Long paymentCycle, Category category, String account, Long joinNum, Long targetNum, String contents, String phone, String status){
