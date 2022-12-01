@@ -57,7 +57,7 @@ public class PersonalEntity extends BaseEntity {
     private String profileimg;
     @Builder
     public PersonalEntity(UserEntity userEntity, String serviceName, String planName,
-                          Long price, LocalDate firstDayOfPayment, Long paymentCycle, Category category, String account, String status){
+                          Long price, LocalDate firstDayOfPayment, Long paymentCycle, Category category, String account, String status, String profileImg){
         this.userIdx = userEntity;
         this.serviceName = serviceName;
         this.planName = planName;
@@ -67,6 +67,7 @@ public class PersonalEntity extends BaseEntity {
         this.category = category;
         this.account = account;
         this.status = status;
+        this.profileimg = profileImg;
     }
 
     public void changeStatus(String newStatus){

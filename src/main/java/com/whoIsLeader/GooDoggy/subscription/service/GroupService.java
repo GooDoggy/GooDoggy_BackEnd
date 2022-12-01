@@ -1,5 +1,6 @@
 package com.whoIsLeader.GooDoggy.subscription.service;
 
+import com.whoIsLeader.GooDoggy.gcs.service.GCSService;
 import com.whoIsLeader.GooDoggy.subscription.DTO.GroupReq;
 import com.whoIsLeader.GooDoggy.subscription.DTO.GroupRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
@@ -14,6 +15,7 @@ import com.whoIsLeader.GooDoggy.user.repository.UserRepository;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +36,8 @@ public class GroupService {
 
     private UserService userService;
     private UserGroupService userGroupService;
+    @Autowired
+    private GCSService gcsService;
 
     public GroupService(UserRepository userRepository, GroupRepository groupRepository, UserGroupService userGroupService,
                         UserGroupRepository userGroupRepository, UserService userService){
@@ -47,6 +51,9 @@ public class GroupService {
 
     public void addSubscription(GroupReq.GetGroupInfo subInfo, HttpServletRequest request) throws BaseException {
         UserEntity user = this.userService.getSessionUser(request);
+
+        String profileUrl = this.gcsService.getServiceImg(subInfo.getServiceName());
+
         GroupEntity groupEntity = GroupEntity.builder()
                 .serviceName(subInfo.getServiceName())
                 .planName(subInfo.getPlanName())
@@ -60,6 +67,7 @@ public class GroupService {
                 .targetNum(subInfo.getNum())
                 .contents(subInfo.getContents())
                 .phone(subInfo.getPhone())
+                .profileimg(profileUrl)
                 .build();
         try{
             this.groupRepository.save(groupEntity);

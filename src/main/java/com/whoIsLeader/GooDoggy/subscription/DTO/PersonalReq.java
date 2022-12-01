@@ -30,4 +30,11 @@ public class PersonalReq {
         private Category category;
         private String account;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class GetProfileImg{
+        private String profileimg;
+    }
 }

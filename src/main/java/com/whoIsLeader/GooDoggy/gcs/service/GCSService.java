@@ -51,4 +51,40 @@ public class GCSService {
         }
         return getProfileImg;
     }
+
+    public String getServiceImg(String serviceName){
+        String returnImg = "https://storage.googleapis.com/goodoggy_bucket/goodoggy.jpg";
+
+        if(serviceName.equals("쿠팡") || serviceName.equals("로켓배송") || serviceName.equals("쿠팡 로켓배송")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/coupang.png";
+        }
+        if(serviceName.equals("플로")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/flo.png";
+        }
+        if(serviceName.equals("프레딧")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/fredit.png";
+        }
+        if(serviceName.equals("중앙일보")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/joongang.png";
+        }
+        if(serviceName.equals("밀리의 서재") || serviceName.equals("밀리의서재")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/millie.png";
+        }
+        if(serviceName.equals("멜론")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/melon.png";
+        }
+        if(serviceName.equals("네이버플러스")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/naver.png";
+        }
+        if(serviceName.equals("넷플릭스")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/netflix.png";
+        }
+        if(serviceName.equals("왓챠")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/watcha.png";
+        }
+        if(serviceName.equals("유튜브 프리미엄")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/youtube.png";
+        }
+        return returnImg;
+    }
 }
