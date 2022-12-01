@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,7 @@ public class MemberService {
                 subscription.setGroupIdx(temp.getGroupIdx());
                 subscription.setServiceName(temp.getServiceName());
                 subscription.setPrice(temp.getPrice());
-                subscription.setFirstDayOfPayment(temp.getFirstDayOfPayment());
+                subscription.setFirstDayOfPayment(convertLocalDateToString(temp.getFirstDayOfPayment()));
                 subscription.setJoinNum(temp.getJoinNum());
                 subscription.setTargetNum(temp.getTargetNum());
                 subscription.setCategory(temp.getCategory());
@@ -137,5 +138,13 @@ public class MemberService {
         } catch (Exception e) {
             throw new BaseException(BaseResponseStatus.DATABASE_PATCH_ERROR);
         }
+    }
+    public String convertLocalDateToString(LocalDate localDate){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return localDate.format(formatter);
+    }
+
+    public LocalDate convertStringToLocalDate(String string){
+        return LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
     }
 }
