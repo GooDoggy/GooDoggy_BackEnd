@@ -20,8 +20,7 @@ public class PersonalRes {
         private Long personalIdx;
         private String serviceName;
         private Long price;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate nextPayment;
+        private String nextPayment;
         private Category category;
     }
 

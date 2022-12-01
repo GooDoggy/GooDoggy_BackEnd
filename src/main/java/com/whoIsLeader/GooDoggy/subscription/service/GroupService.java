@@ -115,7 +115,7 @@ public class GroupService {
                 }
             }
             if(checkTermination(nextPayment, temp.getGroupIdx().getLastDayOfPayment())){
-                subscription.setNextPayment(nextPayment);
+                subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getGroupIdx().getCategory());
                 subscriptionList.add(subscription);
             }
@@ -165,7 +165,7 @@ public class GroupService {
 
         while(nextPayment.isBefore(LocalDate.now())){
             totalCost += price;
-            GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(nextPayment, totalCost, price, account);
+            GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(convertLocalDateToString(nextPayment), totalCost, price, account);
             paymentHistoryList.add(paymentHistory);
             if(group.getPaymentCycle() < 0){
                 nextPayment = nextPayment.plusMonths(group.getPaymentCycle()*(-1));
