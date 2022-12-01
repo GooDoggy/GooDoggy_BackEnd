@@ -19,8 +19,7 @@ public class GroupRes {
         private Long groupIdx;
         private String serviceName;
         private Long price;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate nextPayment;
+        private String nextPayment;
         private Category category;
     }
 
@@ -30,8 +29,7 @@ public class GroupRes {
     @NoArgsConstructor
     @Builder
     public static class paymentHistory{
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate paymentDate;
+        private String paymentDate;
         private Long totalCost;
         private Long price;
         private String account;

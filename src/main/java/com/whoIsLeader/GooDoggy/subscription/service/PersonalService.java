@@ -97,7 +97,7 @@ public class PersonalService {
                         nextPayment = nextPayment.plusDays(temp.getPaymentCycle());
                     }
                 }
-                subscription.setNextPayment(nextPayment);
+                subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getCategory());
                 subscriptionList.add(subscription);
             }
