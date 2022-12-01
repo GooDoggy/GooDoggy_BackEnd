@@ -28,4 +28,11 @@ public class GroupReq {
         private String contents;
         private String phone;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class GetProfileImg{
+        private String profileimg;
+    }
 }

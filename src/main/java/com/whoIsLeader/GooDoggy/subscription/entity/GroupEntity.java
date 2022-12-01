@@ -70,7 +70,7 @@ public class GroupEntity extends BaseEntity {
 
     @Builder
     public GroupEntity(String serviceName, String planName, Long price, LocalDate firstDayOfPayment, LocalDate lastDayOfPayment,
-                        Long paymentCycle, Category category, String account, Long joinNum, Long targetNum, String contents, String phone, String status){
+                        Long paymentCycle, Category category, String account, Long joinNum, Long targetNum, String contents, String phone, String status, String profileimg){
         this.serviceName = serviceName;
         this.planName = planName;
         this.price = price;
@@ -84,6 +84,7 @@ public class GroupEntity extends BaseEntity {
         this.contents = contents;
         this.phone = phone;
         this.status = status;
+        this.profileimg = profileimg;
     }
 
     public void changeStatus(String newStatus){

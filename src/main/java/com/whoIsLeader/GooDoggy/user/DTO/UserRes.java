@@ -23,7 +23,7 @@ public class UserRes {
     public static class userInfo {
         private Long userIdx;
         private String id;
-        private String profileImgUrl;
+        private String profileimg;
     }
 
     @Getter

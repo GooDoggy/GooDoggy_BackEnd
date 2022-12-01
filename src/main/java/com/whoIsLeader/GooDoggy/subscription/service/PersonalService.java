@@ -1,5 +1,6 @@
 package com.whoIsLeader.GooDoggy.subscription.service;
 
+import com.whoIsLeader.GooDoggy.gcs.service.GCSService;
 import com.whoIsLeader.GooDoggy.subscription.DTO.GroupRes;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalReq;
 import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalRes;
@@ -16,6 +17,7 @@ import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
 
 import net.bytebuddy.asm.Advice;
 import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -36,6 +38,8 @@ public class PersonalService {
     private UserRepository userRepository;
 
     private UserService userService;
+    @Autowired
+    private GCSService gcsService;
 
     public PersonalService(PersonalRepository personalRepository, UserRepository userRepository, UserService userService){
         this.personalRepository = personalRepository;
@@ -46,6 +50,9 @@ public class PersonalService {
 
     public void addSubscription(PersonalReq.GetPersonalInfo subInfo, HttpServletRequest request) throws BaseException {
         UserEntity user = this.userService.getSessionUser(request);
+
+        String profileUrl = this.gcsService.getServiceImg(subInfo.getServiceName());
+
         PersonalEntity personalEntity = PersonalEntity.builder()
                 .userEntity(user)
                 .serviceName(subInfo.getServiceName())
@@ -55,6 +62,7 @@ public class PersonalService {
                 .paymentCycle(subInfo.getPaymentCycle())
                 .category(subInfo.getCategory())
                 .account(subInfo.getAccount())
+                .profileImg(profileUrl)
                 .build();
         try{
             this.personalRepository.save(personalEntity);

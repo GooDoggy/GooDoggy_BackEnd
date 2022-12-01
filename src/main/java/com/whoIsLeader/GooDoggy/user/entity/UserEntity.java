@@ -38,9 +38,6 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = true)
-    private String profileImgUrl;
-
     @Column(columnDefinition = "varchar(10) default 'active'")
     private String status;
 
@@ -54,13 +51,12 @@ public class UserEntity extends BaseEntity {
     private String profileimg;
 
     @Builder
-    public UserEntity(String name, String email, String id, String password, String profileImgUrl, String status,
+    public UserEntity(String name, String email, String id, String password, String status,
                       List<PersonalEntity> personalEntityList){
         this.name = name;
         this.email = email;
         this.id = id;
         this.password = password;
-        this.profileImgUrl = profileImgUrl;
         this.status = status;
         this.personalEntityList = personalEntityList;
     }
