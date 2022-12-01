@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +51,7 @@ public class PersonalService {
                 .serviceName(subInfo.getServiceName())
                 .planName(subInfo.getPlanName())
                 .price(subInfo.getPrice())
-                .firstDayOfPayment(subInfo.getFirstDayOfPayment())
+                .firstDayOfPayment(convertStringToLocalDate(subInfo.getFirstDayOfPayment()))
                 .paymentCycle(subInfo.getPaymentCycle())
                 .category(subInfo.getCategory())
                 .account(subInfo.getAccount())
@@ -135,7 +136,7 @@ public class PersonalService {
 
         while(nextPayment.isBefore(LocalDate.now())){
             totalCost += price;
-            PersonalRes.paymentHistory paymentHistory = new PersonalRes.paymentHistory(nextPayment, totalCost, price, account);
+            PersonalRes.paymentHistory paymentHistory = new PersonalRes.paymentHistory(convertLocalDateToString(nextPayment), totalCost, price, account);
             paymentHistoryList.add(paymentHistory);
             if(personal.getPaymentCycle() < 0){
                 nextPayment = nextPayment.plusMonths(personal.getPaymentCycle()*(-1));
@@ -173,14 +174,24 @@ public class PersonalService {
         if(personal.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_PERSONALIDX);
         }
+
         PersonalRes.personalDetails personalDetails = new PersonalRes.personalDetails(personalIdx,personal.get().getServiceName(),
-                personal.get().getPlanName(),personal.get().getPrice(),personal.get().getFirstDayOfPayment(),personal.get().getPaymentCycle(),
-                personal.get().getCategory(),personal.get().getAccount());
+                personal.get().getPlanName(),personal.get().getPrice(),convertLocalDateToString(personal.get().getFirstDayOfPayment()),
+                personal.get().getPaymentCycle(), personal.get().getCategory(),personal.get().getAccount());
 
         return personalDetails;
     }
 
     public List<PersonalEntity> getPersonalList(UserEntity user){
         return this.personalRepository.findAllByUserIdx(user);
+    }
+
+    public String convertLocalDateToString(LocalDate localDate){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return localDate.format(formatter);
+    }
+
+    public LocalDate convertStringToLocalDate(String string){
+        return LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
     }
 }
