@@ -66,7 +66,7 @@ public class TotalService {
         return subList;
     }
 
-    public TotalRes.calender getCalender(HttpServletRequest request) throws BaseException{
+    public TotalRes.calendar getCalendar(HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
         List<PersonalEntity> personal = this.personalService.getPersonalList(user);
         List<GroupEntity> group = this.groupService.getGroupList(user);
@@ -116,15 +116,15 @@ public class TotalService {
             }
         }
         HashSet<Integer> finalDateList = new HashSet<>(dateList);
-        return new TotalRes.calender(year, month, finalDateList);
+        return new TotalRes.calendar(year, month, finalDateList);
     }
 
     public UserRes.mainInfo getMainInfo(HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
         UserRes.userInfo userInfo = new UserRes.userInfo(user.getUserIdx(), user.getId(), user.getProfileimg());
-        TotalRes.calender calender = getCalender(request);
+        TotalRes.calendar calendar = getCalendar(request);
         UserRes.randomInfo randomInfo = new UserRes.randomInfo();
-        if(calender.getDateList().contains(LocalDate.now().getDayOfMonth())){
+        if(calendar.getDateList().contains(LocalDate.now().getDayOfMonth())){
             randomInfo.setString1("오늘은");
             randomInfo.setString2("넷플릭스");
             randomInfo.setString3("결제일입니다");
@@ -147,6 +147,6 @@ public class TotalService {
                 randomInfo.setString3("은 어떠신가요");
             }
         }
-        return new UserRes.mainInfo(randomInfo, userInfo, calender);
+        return new UserRes.mainInfo(randomInfo, userInfo, calendar);
     }
 }
