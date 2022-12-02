@@ -73,8 +73,8 @@ public class GCSService {
         if(serviceName.equals("멜론")) {
             returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/melon.png";
         }
-        if(serviceName.equals("네이버플러스")) {
-            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/naver.png";
+        if(serviceName.equals("라프텔")) {
+            returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/laftel.png";
         }
         if(serviceName.equals("넷플릭스")) {
             returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/netflix.png";
