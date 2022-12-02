@@ -23,7 +23,7 @@ public class UserRes {
     public static class userInfo {
         private Long userIdx;
         private String id;
-        private String profileimg;
+        private String profileImg;
     }
 
     @Getter
@@ -32,6 +32,6 @@ public class UserRes {
     public static class mainInfo {
         private randomInfo randomInfo;
         private userInfo userInfo;
-        private TotalRes.calender calender;
+        private TotalRes.calendar calendar;
     }
 }

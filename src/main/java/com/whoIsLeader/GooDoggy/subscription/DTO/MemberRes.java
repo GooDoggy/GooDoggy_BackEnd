@@ -22,5 +22,6 @@ public class MemberRes {
         private Long joinNum;
         private Long targetNum;
         private Category category;
+        private String profileImg;
     }
 }

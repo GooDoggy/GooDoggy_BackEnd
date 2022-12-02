@@ -107,6 +107,7 @@ public class PersonalService {
                 }
                 subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getCategory());
+                subscription.setProfileImg(temp.getProfileimg());
                 subscriptionList.add(subscription);
             }
         }

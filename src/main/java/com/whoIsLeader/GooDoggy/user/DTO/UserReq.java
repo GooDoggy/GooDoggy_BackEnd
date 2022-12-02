@@ -48,6 +48,6 @@ public class UserReq {
     @AllArgsConstructor
     @Builder
     public static class GetProfileImg{
-        private String profileimg;
+        private String profileImg;
     }
 }

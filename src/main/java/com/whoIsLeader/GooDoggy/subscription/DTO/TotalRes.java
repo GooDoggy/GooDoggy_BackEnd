@@ -24,7 +24,7 @@ public class TotalRes {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class calender{
+    public static class calendar{
         private int year;
         private int month;
         private HashSet<Integer> dateList;
