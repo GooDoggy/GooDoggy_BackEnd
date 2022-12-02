@@ -20,8 +20,7 @@ public class PersonalRes {
         private Long personalIdx;
         private String serviceName;
         private Long price;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate nextPayment;
+        private String nextPayment;
         private Category category;
     }
 
@@ -32,8 +31,7 @@ public class PersonalRes {
     @NoArgsConstructor
     @Builder
     public static class paymentHistory{
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate paymentDate;
+        private String paymentDate;
         private Long totalCost;
         private Long price;
         private String account;
@@ -56,8 +54,7 @@ public class PersonalRes {
         private String serviceName;
         private String planName;
         private Long price;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate firstDayOfPayment;
+        private String firstDayOfPayment;
         private Long paymentCycle;
         private Category category;
         private String account;

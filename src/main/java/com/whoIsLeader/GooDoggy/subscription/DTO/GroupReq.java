@@ -19,10 +19,8 @@ public class GroupReq {
         private String serviceName;
         private String planName;
         private Long price;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate firstDayOfPayment;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate lastDayOfPayment;
+        private String firstDayOfPayment;
+        private String lastDayOfPayment;
         private Long paymentCycle;
         private Category category;
         private String account;

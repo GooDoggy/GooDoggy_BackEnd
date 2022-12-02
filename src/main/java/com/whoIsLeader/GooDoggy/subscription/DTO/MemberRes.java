@@ -18,8 +18,7 @@ public class MemberRes {
         private Long groupIdx;
         private String serviceName;
         private Long price;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate firstDayOfPayment;
+        private String firstDayOfPayment;
         private Long joinNum;
         private Long targetNum;
         private Category category;

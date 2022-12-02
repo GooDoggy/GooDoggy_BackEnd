@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -58,8 +59,8 @@ public class GroupService {
                 .serviceName(subInfo.getServiceName())
                 .planName(subInfo.getPlanName())
                 .price(subInfo.getPrice())
-                .firstDayOfPayment(subInfo.getFirstDayOfPayment())
-                .lastDayOfPayment(subInfo.getLastDayOfPayment())
+                .firstDayOfPayment(convertStringToLocalDate(subInfo.getFirstDayOfPayment()))
+                .lastDayOfPayment(convertStringToLocalDate(subInfo.getLastDayOfPayment()))
                 .paymentCycle(subInfo.getPaymentCycle())
                 .category(subInfo.getCategory())
                 .account(subInfo.getAccount())
@@ -122,7 +123,7 @@ public class GroupService {
                 }
             }
             if(checkTermination(nextPayment, temp.getGroupIdx().getLastDayOfPayment())){
-                subscription.setNextPayment(nextPayment);
+                subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getGroupIdx().getCategory());
                 subscriptionList.add(subscription);
             }
@@ -172,7 +173,7 @@ public class GroupService {
 
         while(nextPayment.isBefore(LocalDate.now())){
             totalCost += price;
-            GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(nextPayment, totalCost, price, account);
+            GroupRes.paymentHistory paymentHistory = new GroupRes.paymentHistory(convertLocalDateToString(nextPayment), totalCost, price, account);
             paymentHistoryList.add(paymentHistory);
             if(group.getPaymentCycle() < 0){
                 nextPayment = nextPayment.plusMonths(group.getPaymentCycle()*(-1));
@@ -194,7 +195,7 @@ public class GroupService {
             throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
         }
         GroupRes.groupDetails groupDetails = new GroupRes.groupDetails(groupIdx,group.get().getServiceName(),group.get().getPlanName(),
-                group.get().getPrice(),group.get().getFirstDayOfPayment(),group.get().getLastDayOfPayment(),group.get().getPaymentCycle(),
+                group.get().getPrice(),convertLocalDateToString(group.get().getFirstDayOfPayment()),convertLocalDateToString(group.get().getLastDayOfPayment()),group.get().getPaymentCycle(),
                 group.get().getCategory(),group.get().getAccount(),group.get().getTargetNum(),group.get().getContents(),group.get().getPhone());
 
         return groupDetails;
@@ -211,5 +212,14 @@ public class GroupService {
             group.add(optional.get());
         }
         return group;
+    }
+
+    public String convertLocalDateToString(LocalDate localDate){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return localDate.format(formatter);
+    }
+
+    public LocalDate convertStringToLocalDate(String string){
+        return LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
     }
 }

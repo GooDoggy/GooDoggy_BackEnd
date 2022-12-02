@@ -24,8 +24,7 @@ public class PersonalReq {
         private String serviceName;
         private String planName;
         private Long price;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate firstDayOfPayment;
+        private String firstDayOfPayment;
         private Long paymentCycle;
         private Category category;
         private String account;
