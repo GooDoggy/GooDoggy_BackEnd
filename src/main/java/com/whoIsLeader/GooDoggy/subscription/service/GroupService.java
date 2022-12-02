@@ -125,6 +125,7 @@ public class GroupService {
             if(checkTermination(nextPayment, temp.getGroupIdx().getLastDayOfPayment())){
                 subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getGroupIdx().getCategory());
+                subscription.setProfileImg(temp.getGroupIdx().getProfileimg());
                 subscriptionList.add(subscription);
             }
             else{

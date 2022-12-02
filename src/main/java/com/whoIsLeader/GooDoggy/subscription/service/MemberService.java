@@ -62,6 +62,7 @@ public class MemberService {
                 subscription.setJoinNum(temp.getJoinNum());
                 subscription.setTargetNum(temp.getTargetNum());
                 subscription.setCategory(temp.getCategory());
+                subscription.setProfileImg(temp.getProfileimg());
                 subscriptionList.add(subscription);
             }
         }

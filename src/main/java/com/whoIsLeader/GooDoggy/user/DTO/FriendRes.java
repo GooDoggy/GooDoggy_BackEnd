@@ -15,6 +15,7 @@ public class FriendRes {
     public static class FriendInfo {
         private Long friendIdx;
         private String id;
+        private String profileImg;
     }
 
     @NoArgsConstructor
@@ -23,6 +24,7 @@ public class FriendRes {
     @Setter
     @Getter
     public static class SubInfo {
+        private String profileImg;
         private String serviceName;
     }
 

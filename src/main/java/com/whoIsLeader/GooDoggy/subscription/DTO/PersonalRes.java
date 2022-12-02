@@ -22,6 +22,7 @@ public class PersonalRes {
         private Long price;
         private String nextPayment;
         private Category category;
+        private String profileImg;
     }
 
 

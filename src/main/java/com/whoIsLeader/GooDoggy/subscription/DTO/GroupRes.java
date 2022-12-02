@@ -21,6 +21,7 @@ public class GroupRes {
         private Long price;
         private String nextPayment;
         private Category category;
+        private String profileImg;
     }
 
     @Setter

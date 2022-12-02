@@ -130,6 +130,7 @@ public class FriendService {
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
                 friendInfo.setFriendIdx(temp.getFriendIdx());
                 friendInfo.setId(temp.getResUserIdx().getId());
+                friendInfo.setProfileImg(temp.getReqUserIdx().getProfileimg());
                 if(friendInfo.getId().equals(user.getId())){
                     friendInfo.setId(temp.getReqUserIdx().getId());
                 }
@@ -149,6 +150,7 @@ public class FriendService {
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
                 friendInfo.setFriendIdx(temp.getFriendIdx());
                 friendInfo.setId(temp.getReqUserIdx().getId());
+                friendInfo.setProfileImg(temp.getReqUserIdx().getProfileimg());
                 friendInfoList.add(friendInfo);
             }
         }
@@ -165,6 +167,7 @@ public class FriendService {
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
                 friendInfo.setFriendIdx(temp.getFriendIdx());
                 friendInfo.setId(temp.getResUserIdx().getId());
+                friendInfo.setProfileImg(temp.getResUserIdx().getProfileimg());
                 friendInfoList.add(friendInfo);
             }
         }
@@ -178,6 +181,7 @@ public class FriendService {
         for(int i = count - 1; (i >= 0) && (i >= count - 3); i--) {
             FriendRes.SubInfo subInfo = new FriendRes.SubInfo();
             subInfo.setServiceName(subscriptionList.get(i).getServiceName());
+            subInfo.setProfileImg(subscriptionList.get(i).getProfileImg());
             subInfoList.add(subInfo);
         }
         FriendRes.BriefInfo briefInfo = new FriendRes.BriefInfo();
