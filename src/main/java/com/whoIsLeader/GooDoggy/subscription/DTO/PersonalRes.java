@@ -23,6 +23,7 @@ public class PersonalRes {
         private String nextPayment;
         private Category category;
         private String profileImg;
+        private paymentReport paymentReport;
     }
 
 

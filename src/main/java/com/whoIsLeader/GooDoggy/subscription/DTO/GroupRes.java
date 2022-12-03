@@ -22,6 +22,7 @@ public class GroupRes {
         private String nextPayment;
         private Category category;
         private String profileImg;
+        private paymentReport paymentReport;
     }
 
     @Setter

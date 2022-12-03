@@ -126,6 +126,7 @@ public class GroupService {
                 subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getGroupIdx().getCategory());
                 subscription.setProfileImg(temp.getGroupIdx().getProfileimg());
+                subscription.setPaymentReport(getPaymentReport(temp.getGroupIdx().getGroupIdx()));
                 subscriptionList.add(subscription);
             }
             else{
@@ -143,8 +144,8 @@ public class GroupService {
         return true;
     }
 
-    public GroupRes.paymentReport getAllPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
-        UserEntity user = this.userService.getSessionUser(request);
+    public GroupRes.paymentReport getAllPaymentReport(Long groupIdx) throws BaseException{
+        //UserEntity user = this.userService.getSessionUser(request);
         Optional<GroupEntity> group = this.groupRepository.findByGroupIdx(groupIdx);
         if(group.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
@@ -152,8 +153,8 @@ public class GroupService {
         return calculatePaymentReport(group.get());
     }
 
-    public GroupRes.paymentReport getPaymentReport(Long groupIdx, HttpServletRequest request) throws BaseException{
-        GroupRes.paymentReport paymentReport = getAllPaymentReport(groupIdx, request);
+    public GroupRes.paymentReport getPaymentReport(Long groupIdx) throws BaseException{
+        GroupRes.paymentReport paymentReport = getAllPaymentReport(groupIdx);
         if(paymentReport.getPaymentHistoryList().size() > 3){
             List<GroupRes.paymentHistory> paymentHistoryList = new ArrayList<>();
             for(int i = 0; i < 3; i++){

@@ -45,16 +45,16 @@ public class PersonalController {
         }
     }
 
-    @ResponseBody
-    @GetMapping("/payment/{personalIdx}")
-    public BaseResponse<PersonalRes.paymentReport> getPaymentReport(@PathVariable Long personalIdx, HttpServletRequest request){
-        try{
-            PersonalRes.paymentReport paymentReport= this.personalService.getPaymentReport(personalIdx, request);
-            return new BaseResponse<>(paymentReport);
-        } catch (BaseException e){
-            return new BaseResponse<>(e.getStatus());
-        }
-    }
+//    @ResponseBody
+//    @GetMapping("/payment/{personalIdx}")
+//    public BaseResponse<PersonalRes.paymentReport> getPaymentReport(@PathVariable Long personalIdx, HttpServletRequest request){
+//        try{
+//            PersonalRes.paymentReport paymentReport= this.personalService.getPaymentReport(personalIdx);
+//            return new BaseResponse<>(paymentReport);
+//        } catch (BaseException e){
+//            return new BaseResponse<>(e.getStatus());
+//        }
+//    }
 
     @ResponseBody
     @PatchMapping("/{personalIdxList}")
@@ -78,11 +78,12 @@ public class PersonalController {
         }
     }
 
+    //request 처리 추가
     @ResponseBody
     @GetMapping("/{personalIdx}/payment")
     public BaseResponse<PersonalRes.paymentReport> getAllPaymentReport(@PathVariable Long personalIdx, HttpServletRequest request){
         try{
-            PersonalRes.paymentReport paymentReport= this.personalService.getAllPaymentReport(personalIdx, request);
+            PersonalRes.paymentReport paymentReport= this.personalService.getAllPaymentReport(personalIdx);
             return new BaseResponse<>(paymentReport);
         } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
