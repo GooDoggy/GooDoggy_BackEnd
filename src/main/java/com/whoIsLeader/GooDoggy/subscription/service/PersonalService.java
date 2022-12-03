@@ -108,14 +108,15 @@ public class PersonalService {
                 subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getCategory());
                 subscription.setProfileImg(temp.getProfileimg());
+                subscription.setPaymentReport(getPaymentReport(temp.getPersonalIdx()));
                 subscriptionList.add(subscription);
             }
         }
         return subscriptionList;
     }
 
-    public PersonalRes.paymentReport getAllPaymentReport(Long personalIdx, HttpServletRequest request) throws BaseException{
-        UserEntity user = this.userService.getSessionUser(request);
+    public PersonalRes.paymentReport getAllPaymentReport(Long personalIdx) throws BaseException{
+//        UserEntity user = this.userService.getSessionUser(request);
         Optional<PersonalEntity> personal = this.personalRepository.findByPersonalIdx(personalIdx);
         if(personal.isEmpty()){
             throw new BaseException(BaseResponseStatus.NON_EXIST_PERSONALIDX);
@@ -123,8 +124,8 @@ public class PersonalService {
         return calculatePaymentReport(personal.get());
     }
 
-    public PersonalRes.paymentReport getPaymentReport(Long personalIdx, HttpServletRequest request) throws BaseException{
-        PersonalRes.paymentReport paymentReport = getAllPaymentReport(personalIdx, request);
+    public PersonalRes.paymentReport getPaymentReport(Long personalIdx) throws BaseException{
+        PersonalRes.paymentReport paymentReport = getAllPaymentReport(personalIdx);
         if(paymentReport.getPaymentHistoryList().size() > 3){
             List<PersonalRes.paymentHistory> paymentHistoryList = new ArrayList<>();
             for(int i = 0; i < 3; i++){

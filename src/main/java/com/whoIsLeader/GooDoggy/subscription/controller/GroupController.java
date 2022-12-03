@@ -44,16 +44,16 @@ public class GroupController {
         }
     }
 
-    @ResponseBody
-    @GetMapping("/payment/{groupIdx}")
-    public BaseResponse<GroupRes.paymentReport> getPaymentReport(@PathVariable Long groupIdx, HttpServletRequest request){
-        try{
-            GroupRes.paymentReport paymentReport = this.groupService.getPaymentReport(groupIdx, request);
-            return new BaseResponse<>(paymentReport);
-        } catch (BaseException e){
-            return new BaseResponse<>(e.getStatus());
-        }
-    }
+//    @ResponseBody
+//    @GetMapping("/payment/{groupIdx}")
+//    public BaseResponse<GroupRes.paymentReport> getPaymentReport(@PathVariable Long groupIdx, HttpServletRequest request){
+//        try{
+//            GroupRes.paymentReport paymentReport = this.groupService.getPaymentReport(groupIdx);
+//            return new BaseResponse<>(paymentReport);
+//        } catch (BaseException e){
+//            return new BaseResponse<>(e.getStatus());
+//        }
+//    }
 
     @ResponseBody
     @GetMapping("/{groupIdx}")
@@ -70,7 +70,7 @@ public class GroupController {
     @GetMapping("/{groupIdx}/payment")
     public BaseResponse<GroupRes.paymentReport> getALLPaymentReport(@PathVariable Long groupIdx, HttpServletRequest request){
         try{
-            GroupRes.paymentReport paymentReport = this.groupService.getAllPaymentReport(groupIdx, request);
+            GroupRes.paymentReport paymentReport = this.groupService.getAllPaymentReport(groupIdx);
             return new BaseResponse<>(paymentReport);
         } catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
