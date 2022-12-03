@@ -15,5 +15,6 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Long
     List<UserGroupEntity> findAllByUserIdx(UserEntity userEntity);
     Optional<UserGroupEntity> findByUserIdxAndGroupIdx(UserEntity userEntity, GroupEntity groupEntity);
     Optional<UserGroupEntity> findFirstByGroupIdx(GroupEntity groupEntity);
+    List<UserGroupEntity> findAllByGroupIdx(GroupEntity groupEntity);
 }
 

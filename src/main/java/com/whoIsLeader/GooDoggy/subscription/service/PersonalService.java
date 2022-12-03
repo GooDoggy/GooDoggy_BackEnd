@@ -89,28 +89,29 @@ public class PersonalService {
         List<PersonalEntity> personalEntityList = this.personalRepository.findAllByUserIdx(user);
         List<PersonalRes.subscription> subscriptionList = new ArrayList<>();
         for(PersonalEntity temp : personalEntityList){
-            if(temp.getStatus().equals("active")){
-                PersonalRes.subscription subscription = new PersonalRes.subscription();
-                subscription.setPersonalIdx(temp.getPersonalIdx());
-                subscription.setServiceName(temp.getServiceName());
-                subscription.setPrice(temp.getPrice());
-                LocalDate nextPayment = temp.getFirstDayOfPayment();
-                if(temp.getPaymentCycle() < 0){
-                    while(nextPayment.isBefore(LocalDate.now())){
-                        nextPayment = nextPayment.plusMonths(temp.getPaymentCycle()*(-1));
-                    }
-                }
-                else{
-                    while(nextPayment.isBefore(LocalDate.now())){
-                        nextPayment = nextPayment.plusDays(temp.getPaymentCycle());
-                    }
-                }
-                subscription.setNextPayment(convertLocalDateToString(nextPayment));
-                subscription.setCategory(temp.getCategory());
-                subscription.setProfileImg(temp.getProfileimg());
-                subscription.setPaymentReport(getPaymentReport(temp.getPersonalIdx()));
-                subscriptionList.add(subscription);
+            if(temp.getStatus().equals("inactive")){
+                continue;
             }
+            PersonalRes.subscription subscription = new PersonalRes.subscription();
+            subscription.setPersonalIdx(temp.getPersonalIdx());
+            subscription.setServiceName(temp.getServiceName());
+            subscription.setPrice(temp.getPrice());
+            LocalDate nextPayment = temp.getFirstDayOfPayment();
+            if(temp.getPaymentCycle() < 0){
+                while(nextPayment.isBefore(LocalDate.now())){
+                    nextPayment = nextPayment.plusMonths(temp.getPaymentCycle()*(-1));
+                }
+            }
+            else{
+                while(nextPayment.isBefore(LocalDate.now())){
+                    nextPayment = nextPayment.plusDays(temp.getPaymentCycle());
+                }
+            }
+            subscription.setNextPayment(convertLocalDateToString(nextPayment));
+            subscription.setCategory(temp.getCategory());
+            subscription.setProfileImg(temp.getProfileImg());
+            subscription.setPaymentReport(getPaymentReport(temp.getPersonalIdx()));
+            subscriptionList.add(subscription);
         }
         return subscriptionList;
     }

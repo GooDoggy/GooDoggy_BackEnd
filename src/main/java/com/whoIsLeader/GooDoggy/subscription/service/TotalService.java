@@ -121,7 +121,7 @@ public class TotalService {
 
     public UserRes.mainInfo getMainInfo(HttpServletRequest request) throws BaseException{
         UserEntity user = this.userService.getSessionUser(request);
-        UserRes.userInfo userInfo = new UserRes.userInfo(user.getUserIdx(), user.getId(), user.getProfileimg());
+        UserRes.userInfo userInfo = new UserRes.userInfo(user.getUserIdx(), user.getId(), user.getProfileImg());
         TotalRes.calendar calendar = getCalendar(request);
         UserRes.randomInfo randomInfo = new UserRes.randomInfo();
         if(calendar.getDateList().contains(LocalDate.now().getDayOfMonth())){

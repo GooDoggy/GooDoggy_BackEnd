@@ -1,5 +1,6 @@
 package com.whoIsLeader.GooDoggy.subscription.service;
 
+import com.google.api.Http;
 import com.whoIsLeader.GooDoggy.gcs.service.GCSService;
 import com.whoIsLeader.GooDoggy.subscription.DTO.GroupReq;
 import com.whoIsLeader.GooDoggy.subscription.DTO.GroupRes;
@@ -68,7 +69,7 @@ public class GroupService {
                 .targetNum(subInfo.getNum())
                 .contents(subInfo.getContents())
                 .phone(subInfo.getPhone())
-                .profileimg(profileUrl)
+                .profileImg(profileUrl)
                 .build();
         try{
             this.groupRepository.save(groupEntity);
@@ -107,6 +108,9 @@ public class GroupService {
         List<UserGroupEntity> userGroupEntityList = this.userGroupRepository.findAllByUserIdx(user);
         List<GroupRes.subscription> subscriptionList = new ArrayList<>();
         for(UserGroupEntity temp : userGroupEntityList){
+            if(temp.getGroupIdx().getStatus().equals("inactive")){
+                continue;
+            }
             GroupRes.subscription subscription = new GroupRes.subscription();
             subscription.setGroupIdx(temp.getGroupIdx().getGroupIdx());
             subscription.setServiceName(temp.getGroupIdx().getServiceName());
@@ -125,7 +129,7 @@ public class GroupService {
             if(checkTermination(nextPayment, temp.getGroupIdx().getLastDayOfPayment())){
                 subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getGroupIdx().getCategory());
-                subscription.setProfileImg(temp.getGroupIdx().getProfileimg());
+                subscription.setProfileImg(temp.getGroupIdx().getProfileImg());
                 subscription.setPaymentReport(getPaymentReport(temp.getGroupIdx().getGroupIdx()));
                 subscriptionList.add(subscription);
             }
@@ -223,5 +227,44 @@ public class GroupService {
 
     public LocalDate convertStringToLocalDate(String string){
         return LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
+    }
+
+    public boolean inactiveSubscription(Long groupIdx, HttpServletRequest request) throws BaseException{
+        UserEntity user = this.userService.getSessionUser(request);
+        Optional<GroupEntity> group = this.groupRepository.findByGroupIdx(groupIdx);
+        if(group.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
+        }
+        Optional<UserGroupEntity> userGroup1 = this.userGroupRepository.findFirstByGroupIdx(group.get());
+        if(userGroup1.isEmpty()){
+            throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
+        }
+        if(user.getUserIdx() == userGroup1.get().getUserIdx().getUserIdx()){
+            try{
+                group.get().changeStatus("inactive");
+                this.groupRepository.save(group.get());
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.DATABASE_PATCH_ERROR);
+            }
+            return false;
+        }
+        else{
+            Optional<UserGroupEntity> userGroup2 = this.userGroupRepository.findByUserIdxAndGroupIdx(user, group.get());
+            if(userGroup2.isEmpty()){
+                throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX_GROUPIDX);
+            }
+            try{
+                this.userGroupRepository.delete(userGroup2.get());
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.DATABASE_DELETE_ERROR);
+            }
+            try{
+                group.get().setJoinNum(group.get().getJoinNum()-1);
+                this.groupRepository.save(group.get());
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.DATABASE_PATCH_ERROR);
+            }
+            return true;
+        }
     }
 }

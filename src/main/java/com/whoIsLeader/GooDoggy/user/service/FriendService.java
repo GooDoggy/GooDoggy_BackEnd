@@ -130,7 +130,7 @@ public class FriendService {
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
                 friendInfo.setFriendIdx(temp.getFriendIdx());
                 friendInfo.setId(temp.getResUserIdx().getId());
-                friendInfo.setProfileImg(temp.getReqUserIdx().getProfileimg());
+                friendInfo.setProfileImg(temp.getReqUserIdx().getProfileImg());
                 if(friendInfo.getId().equals(user.getId())){
                     friendInfo.setId(temp.getReqUserIdx().getId());
                 }
@@ -150,7 +150,7 @@ public class FriendService {
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
                 friendInfo.setFriendIdx(temp.getFriendIdx());
                 friendInfo.setId(temp.getReqUserIdx().getId());
-                friendInfo.setProfileImg(temp.getReqUserIdx().getProfileimg());
+                friendInfo.setProfileImg(temp.getReqUserIdx().getProfileImg());
                 friendInfoList.add(friendInfo);
             }
         }
@@ -167,7 +167,7 @@ public class FriendService {
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
                 friendInfo.setFriendIdx(temp.getFriendIdx());
                 friendInfo.setId(temp.getResUserIdx().getId());
-                friendInfo.setProfileImg(temp.getResUserIdx().getProfileimg());
+                friendInfo.setProfileImg(temp.getResUserIdx().getProfileImg());
                 friendInfoList.add(friendInfo);
             }
         }

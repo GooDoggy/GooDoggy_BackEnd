@@ -154,8 +154,8 @@ public class UserService {
         }
     }
 
-    public String getProfileimg(HttpServletRequest request) throws BaseException{
+    public String getProfileImg(HttpServletRequest request) throws BaseException{
         UserEntity user = this.getSessionUser(request);
-        return user.getProfileimg();
+        return user.getProfileImg();
     }
 }
