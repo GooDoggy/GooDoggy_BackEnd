@@ -127,9 +127,15 @@ public class GroupService {
                 }
             }
             if(checkTermination(nextPayment, temp.getGroupIdx().getLastDayOfPayment())){
+                List<String> userProfileImgList = new ArrayList<>();
+                List<UserGroupEntity> userGroupList = this.userGroupRepository.findAllByGroupIdx(temp.getGroupIdx());
+                for(UserGroupEntity temp2 : userGroupList){
+                    userProfileImgList.add(temp2.getUserIdx().getProfileImg());
+                }
                 subscription.setNextPayment(convertLocalDateToString(nextPayment));
                 subscription.setCategory(temp.getGroupIdx().getCategory());
                 subscription.setProfileImg(temp.getGroupIdx().getProfileImg());
+                subscription.setUserProfileImgList(userProfileImgList);
                 subscription.setPaymentReport(getPaymentReport(temp.getGroupIdx().getGroupIdx()));
                 subscriptionList.add(subscription);
             }
