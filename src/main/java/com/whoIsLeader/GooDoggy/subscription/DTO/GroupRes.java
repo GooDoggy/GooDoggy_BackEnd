@@ -22,6 +22,7 @@ public class GroupRes {
         private String nextPayment;
         private Category category;
         private String profileImg;
+        private List<String> userProfileImgList;
         private paymentReport paymentReport;
     }
 

@@ -76,4 +76,17 @@ public class GroupController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @PatchMapping("/{groupIdx}")
+    public BaseResponse<String> inactiveSubscription(@PathVariable Long groupIdx, HttpServletRequest request) {
+        try {
+            if(this.groupService.inactiveSubscription(groupIdx, request)) {
+                return new BaseResponse<>("다인 구독 그룹에서 탈퇴하였습니다.");
+            }
+            return new BaseResponse<>("다인 구독 그룹이 해제되었습니다.");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

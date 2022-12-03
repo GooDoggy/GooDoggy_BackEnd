@@ -62,7 +62,7 @@ public class MemberService {
                 subscription.setJoinNum(temp.getJoinNum());
                 subscription.setTargetNum(temp.getTargetNum());
                 subscription.setCategory(temp.getCategory());
-                subscription.setProfileImg(temp.getProfileimg());
+                subscription.setProfileImg(temp.getProfileImg());
                 subscriptionList.add(subscription);
             }
         }
@@ -115,31 +115,7 @@ public class MemberService {
             throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);
         }
     }
-    public void withdrawGroup(Long groupIdx, HttpServletRequest request) throws BaseException{
-        UserEntity user = this.userService.getSessionUser(request);
-        Optional<GroupEntity> group = this.groupRepository.findByGroupIdx(groupIdx);
-        if(group.isEmpty()){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_GROUPIDX);
-        }
-        Optional<UserGroupEntity> userGroup = this.userGroupRepository.findByUserIdxAndGroupIdx(user, group.get());
-        if(userGroup.isEmpty()){
-            throw new BaseException(BaseResponseStatus.NON_EXIST_USERIDX_GROUPIDX);
-        }
-        if(userGroup.get().equals(this.userGroupRepository.findFirstByGroupIdx(group.get()).get())){
-            throw new BaseException(BaseResponseStatus.INVALID_LEADER_ACTION);
-        }
-        try{
-            this.userGroupRepository.delete(userGroup.get());
-        } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.DATABASE_DELETE_ERROR);
-        }
-        try{
-            group.get().setJoinNum(group.get().getJoinNum()-1);
-            this.groupRepository.save(group.get());
-        } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.DATABASE_PATCH_ERROR);
-        }
-    }
+
     public String convertLocalDateToString(LocalDate localDate){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return localDate.format(formatter);

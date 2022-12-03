@@ -44,7 +44,7 @@ public class GCSService {
             throw new BaseException(BaseResponseStatus.ERROR_STORING_TO_GCS);
         }
         try{
-            user.changeProfileimg(getProfileImg.getProfileImg());
+            user.changeProfileImg(getProfileImg.getProfileImg());
             this.userRepository.save(user);
         } catch (Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_INSERT_ERROR);

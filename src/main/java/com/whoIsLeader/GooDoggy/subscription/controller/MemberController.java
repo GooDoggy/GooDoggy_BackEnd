@@ -53,15 +53,4 @@ public class MemberController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
-    @ResponseBody
-    @DeleteMapping("/{groupIdx}")
-    public BaseResponse<String> withdrawGroup(@PathVariable Long groupIdx, HttpServletRequest request) {
-        try {
-            this.memberService.withdrawGroup(groupIdx, request);
-            return new BaseResponse<>("다인 구독 그룹에서 탈퇴하였습니다.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }
-    }
 }

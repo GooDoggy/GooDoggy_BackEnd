@@ -27,7 +27,7 @@ public class GCSController {
 
     @GetMapping("/get")
     public String getProfileImg(HttpServletRequest request) throws BaseException{
-        String profileimg = this.userService.getProfileimg(request);
-        return profileimg;
+        String profileImg = this.userService.getProfileImg(request);
+        return profileImg;
     }
 }
