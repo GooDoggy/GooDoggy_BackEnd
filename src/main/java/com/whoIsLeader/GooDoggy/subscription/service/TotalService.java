@@ -124,29 +124,67 @@ public class TotalService {
         UserRes.userInfo userInfo = new UserRes.userInfo(user.getUserIdx(), user.getId(), user.getProfileImg());
         TotalRes.calendar calendar = getCalendar(request);
         UserRes.randomInfo randomInfo = new UserRes.randomInfo();
+        int num = (int)(Math.random()*10);
         if(calendar.getDateList().contains(LocalDate.now().getDayOfMonth())){
             randomInfo.setString1("오늘은");
             randomInfo.setString2("넷플릭스");
             randomInfo.setString3("결제일입니다");
+            return new UserRes.mainInfo(randomInfo, userInfo, calendar);
         }
-        else{
-            int num = (int)(Math.random()*2);
-            if(num == 0){
-                randomInfo.setString1("다음 결제일은");
-                randomInfo.setString2("3일 뒤");
-                randomInfo.setString3("입니다");
-            }
-            else if(num == 1){
-                randomInfo.setString1("요즘 인기있는");
-                randomInfo.setString2("디즈니 플러스");
-                randomInfo.setString3("추천드려요");
-            }
-            else{
-                randomInfo.setString1("음악 감상 1위");
-                randomInfo.setString2("멜론");
-                randomInfo.setString3("은 어떠신가요");
+        if(num < 5){
+            randomInfo.setString1("다음 결제일은");
+            randomInfo.setString2(getNextService(calendar.getDateList()));
+            randomInfo.setString3("입니다");
+            if(!randomInfo.getString2().equals("")) {
+                return new UserRes.mainInfo(randomInfo, userInfo, calendar);
             }
         }
+        randomInfo.setString1("요즘 인기있는");
+        randomInfo.setString2(getPopularService());
+        randomInfo.setString3("추천드려요");
         return new UserRes.mainInfo(randomInfo, userInfo, calendar);
+    }
+
+    public String getPopularService(){
+        List<PersonalEntity> personalList = this.personalService.getEntityList();
+        List<GroupEntity> groupList = this.groupService.getEntityList();
+        HashMap<String,Integer> map = new HashMap<String,Integer>();
+        int max_num = 0;
+        String result = "";
+        for(PersonalEntity temp: personalList){
+            Integer num = 1;
+            if(map.containsKey(temp.getServiceName())){
+                num = map.get(temp.getServiceName()) + 1;
+            }
+            map.put(temp.getServiceName(), num);
+            if(max_num < num){
+                max_num = num;
+                result = temp.getServiceName();
+            }
+        }
+        for(GroupEntity temp: groupList){
+            Integer num = 1;
+            if(map.containsKey(temp.getServiceName())){
+                num = map.get(temp.getServiceName()) + 1;
+            }
+            map.put(temp.getServiceName(), num);
+            if(max_num < num){
+                max_num = num;
+                result = temp.getServiceName();
+            }
+        }
+        return result;
+    }
+
+    public String getNextService(HashSet<Integer> dateList){
+        int nearestDate = 32;
+        String result = "";
+        for(Integer temp : dateList){
+            if(temp > LocalDate.now().getDayOfMonth() && nearestDate > temp){
+                nearestDate = temp;
+                result = temp.toString() + "일 뒤";
+            }
+        }
+        return result;
     }
 }

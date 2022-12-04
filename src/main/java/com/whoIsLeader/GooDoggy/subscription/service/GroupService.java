@@ -273,4 +273,8 @@ public class GroupService {
             return true;
         }
     }
+
+    public List<GroupEntity> getEntityList(){
+        return this.groupRepository.findAll();
+    }
 }
