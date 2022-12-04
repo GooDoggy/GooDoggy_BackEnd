@@ -205,4 +205,8 @@ public class PersonalService {
     public LocalDate convertStringToLocalDate(String string){
         return LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
     }
+
+    public List<PersonalEntity> getEntityList(){
+        return this.personalRepository.findAll();
+    }
 }

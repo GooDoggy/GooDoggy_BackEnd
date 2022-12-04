@@ -20,8 +20,8 @@ public enum BaseResponseStatus {
     FILENAME_NULL(false, 2025, "파일 이름이 null입니다."),
     FAILED_CONVERT(false, 2026, "파일 변환에 실패하였습니다."),
     INVALID_FILE_EXTENSION(false, 2027, "파일 확장자가 잘못되었습니다."),
-    ERROR_STORING_TO_GCS(false, 2028, "GCS에 데이터를 저장하는 데에 실패하였습니다."),
-    INVALID_LEADER_ACTION(false, 2052, "그룹장은 그룹을 탈퇴할 수 없습니다."),
+    INVALID_LEADER_ACTION(false, 2028, "그룹장은 그룹을 탈퇴할 수 없습니다."),
+    INVALID_CATEGORY(false, 2029, "그룹장은 그룹을 탈퇴할 수 없습니다."),
 
     NON_EXIST_ID(false, 2030, "아이디가 존재하지 않습니다."),
     NON_EXIST_SESSION(false, 2031, "유저 세션이 존재하지 않습니다."),
@@ -46,7 +46,9 @@ public enum BaseResponseStatus {
 
     DATABASE_INSERT_ERROR(false, 6000, "데이터베이스 저장 오류가 발생하였습니다."),
     DATABASE_PATCH_ERROR(false, 6001, "데이터베이스 수정 오류가 발생하였습니다."),
-    DATABASE_DELETE_ERROR(false, 6002, "데이터베이스 삭제 오류가 발생하였습니다.")
+    DATABASE_DELETE_ERROR(false, 6002, "데이터베이스 삭제 오류가 발생하였습니다."),
+
+    ERROR_STORING_TO_GCS(false, 7000, "GCS에 데이터를 저장하는 데에 실패하였습니다.")
     ;
 
     private final boolean isSuccess;
