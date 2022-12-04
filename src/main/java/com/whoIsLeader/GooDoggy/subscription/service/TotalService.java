@@ -165,7 +165,7 @@ public class TotalService {
         for(GroupEntity temp: groupList){
             Integer num = 1;
             if(map.containsKey(temp.getServiceName())){
-                num = map.get(temp.getServiceName()) + 1;
+                num = map.get(temp.getServiceName()) + (int)(long)temp.getJoinNum();
             }
             map.put(temp.getServiceName(), num);
             if(max_num < num){
