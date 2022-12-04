@@ -31,4 +31,15 @@ public class StatisticsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/list")
+    public BaseResponse<List<StatisticsRes.briefSub>> getSubscriptionList(HttpServletRequest request) {
+        try {
+            List<StatisticsRes.briefSub> briefSubList = this.statisticsService.getBriefList(request);
+            return new BaseResponse<>(briefSubList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

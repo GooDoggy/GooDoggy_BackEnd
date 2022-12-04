@@ -70,4 +70,14 @@ public class StatisticsService {
         }
         return categoryList;
     }
+
+    public List<StatisticsRes.briefSub> getBriefList(HttpServletRequest request) throws BaseException{
+        UserEntity user = this.userService.getSessionUser(request);
+        List<PersonalEntity> personal = this.personalService.getPersonalList(user);
+        List<StatisticsRes.briefSub> briefSubList = new ArrayList<>();
+        for(PersonalEntity temp : personal){
+            briefSubList.add(new StatisticsRes.briefSub(temp.getProfileImg(), temp.getServiceName()));
+        }
+        return briefSubList;
+    }
 }

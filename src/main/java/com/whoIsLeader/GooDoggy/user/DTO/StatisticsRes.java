@@ -16,4 +16,12 @@ public class StatisticsRes {
         private float percent;
     }
 
+    @Setter
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class briefSub{
+        private String profileImg;
+        private String serviceName;
+    }
 }
