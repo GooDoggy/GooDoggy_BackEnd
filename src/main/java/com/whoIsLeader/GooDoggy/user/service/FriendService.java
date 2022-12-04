@@ -129,15 +129,35 @@ public class FriendService {
             if(temp.getStatus().equals("active")){
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
                 friendInfo.setFriendIdx(temp.getFriendIdx());
-                friendInfo.setId(temp.getResUserIdx().getId());
                 friendInfo.setProfileImg(temp.getReqUserIdx().getProfileImg());
-                if(friendInfo.getId().equals(user.getId())){
+                if(temp.getResUserIdx().getId().equals(user.getId())){
                     friendInfo.setId(temp.getReqUserIdx().getId());
+                    friendInfo.setBriefInfo(getBriefSubscription(temp.getReqUserIdx()));
+                }
+                else{
+                    friendInfo.setId(temp.getResUserIdx().getId());
+                    friendInfo.setBriefInfo(getBriefSubscription(temp.getResUserIdx()));
                 }
                 friendInfoList.add(friendInfo);
             }
         }
         return friendInfoList;
+    }
+
+    public FriendRes.BriefInfo getBriefSubscription(UserEntity user) throws  BaseException{
+        List<PersonalRes.subscription> subscriptionList = this.personalService.getSubscriptionList(user);
+        int count = subscriptionList.size();
+        List<FriendRes.SubInfo> subInfoList= new ArrayList<>();
+        for(int i = count - 1; (i >= 0) && (i >= count - 3); i--) {
+            FriendRes.SubInfo subInfo = new FriendRes.SubInfo();
+            subInfo.setServiceName(subscriptionList.get(i).getServiceName());
+            subInfo.setProfileImg(subscriptionList.get(i).getProfileImg());
+            subInfoList.add(subInfo);
+        }
+        FriendRes.BriefInfo briefInfo = new FriendRes.BriefInfo();
+        briefInfo.setNum(Long.valueOf(count));
+        briefInfo.setSubInfoList(subInfoList);
+        return briefInfo;
     }
 
     public List<FriendRes.FriendInfo> getReqFriendList(HttpServletRequest request) throws  BaseException{ //유저가 받은
@@ -172,23 +192,5 @@ public class FriendService {
             }
         }
         return friendInfoList;
-    }
-
-    public FriendRes.BriefInfo getBriefSubscription(Long friendIdx, HttpServletRequest request) throws  BaseException{
-        List<PersonalRes.subscription> subscriptionList = this.personalService.getOthersSubList(friendIdx, request);
-        int count = subscriptionList.size();
-        List<FriendRes.SubInfo> subInfoList= new ArrayList<>();
-        for(int i = count - 1; (i >= 0) && (i >= count - 3); i--) {
-            FriendRes.SubInfo subInfo = new FriendRes.SubInfo();
-            subInfo.setServiceName(subscriptionList.get(i).getServiceName());
-            subInfo.setProfileImg(subscriptionList.get(i).getProfileImg());
-            subInfoList.add(subInfo);
-        }
-        FriendRes.BriefInfo briefInfo = new FriendRes.BriefInfo();
-        briefInfo.setUserIdx(friendIdx);
-        briefInfo.setId(this.userRepository.findByUserIdx(friendIdx).get().getId());
-        briefInfo.setNum(Long.valueOf(count));
-        briefInfo.setSubInfoList(subInfoList);
-        return briefInfo;
     }
 }
