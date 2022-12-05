@@ -1,5 +1,6 @@
 package com.whoIsLeader.GooDoggy.subscription.controller;
 
+import com.whoIsLeader.GooDoggy.subscription.DTO.StatisticsReq;
 import com.whoIsLeader.GooDoggy.subscription.service.StatisticsService;
 import com.whoIsLeader.GooDoggy.subscription.DTO.StatisticsRes;
 import com.whoIsLeader.GooDoggy.util.BaseException;
@@ -58,6 +59,17 @@ public class StatisticsController {
         try {
             List<StatisticsRes.group> groupList = this.statisticsService.getGroupStatistics(request);
             return new BaseResponse<>(groupList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/week")
+    public BaseResponse<List<StatisticsRes.dayReport>> getAppUsageHistory(@RequestBody List<StatisticsReq.appUsageList> appUsage, HttpServletRequest request) {
+        try {
+            List<StatisticsRes.dayReport> weekReportList = this.statisticsService.getWeekReport(appUsage, request);
+            return new BaseResponse<>(weekReportList);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

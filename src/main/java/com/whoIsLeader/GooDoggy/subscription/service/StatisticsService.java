@@ -1,5 +1,6 @@
 package com.whoIsLeader.GooDoggy.subscription.service;
 
+import com.whoIsLeader.GooDoggy.subscription.DTO.StatisticsReq;
 import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import com.whoIsLeader.GooDoggy.subscription.entity.GroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
@@ -156,5 +157,34 @@ public class StatisticsService {
             count++;
         }
         return groupList;
+    }
+
+    public List<StatisticsRes.dayReport> getWeekReport(List<StatisticsReq.appUsageList> appUsage, HttpServletRequest request) throws BaseException {
+        UserEntity user = this.userService.getSessionUser(request);
+        List<PersonalEntity> personal = this.personalService.getPersonalList(user);
+        List<GroupEntity> group = this.groupService.getGroupList(user);
+
+        HashSet<String> serviceNameSet = new HashSet<>();
+        for(PersonalEntity temp : personal){
+            serviceNameSet.add(temp.getServiceName());
+        }
+        for(GroupEntity temp : group){
+            serviceNameSet.add(temp.getServiceName());
+        }
+
+        List<StatisticsRes.dayReport> dayReportList = new ArrayList<>();
+        for(StatisticsReq.appUsageList temp1 : appUsage){ // 요일
+            List<StatisticsRes.subInfo> subInfoList = new ArrayList<>();
+            int totalTime = 0;
+            for(StatisticsReq.appUsage temp2 : temp1.getAppUsageList()){ // 서비스
+                if(serviceNameSet.contains(temp2.getServiceName())){
+                    subInfoList.add(new StatisticsRes.subInfo(temp2.getServiceName(), temp2.getUsingTime()));
+                    totalTime += temp2.getUsingTime();
+                }
+            }
+            dayReportList.add(new StatisticsRes.dayReport(totalTime, subInfoList));
+        }
+
+        return dayReportList;
     }
 }

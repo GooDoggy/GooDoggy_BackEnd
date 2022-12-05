@@ -3,6 +3,8 @@ package com.whoIsLeader.GooDoggy.subscription.DTO;
 import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor
 public class StatisticsRes {
 
@@ -43,5 +45,22 @@ public class StatisticsRes {
         private String serviceName;
         private Integer num;
         private float percent;
+    }
+
+    @Setter
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class dayReport{
+        private int totalUsingTime;
+        private List<subInfo> subInfoList;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class subInfo{
+        private String serviceName;
+        private int usingTime;
     }
 }
