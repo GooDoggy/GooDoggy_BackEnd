@@ -1,4 +1,4 @@
-package com.whoIsLeader.GooDoggy.user.DTO;
+package com.whoIsLeader.GooDoggy.subscription.DTO;
 
 import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import lombok.*;
@@ -23,5 +23,15 @@ public class StatisticsRes {
     public static class briefSub{
         private String profileImg;
         private String serviceName;
+    }
+
+    @Setter
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class personal{
+        private String serviceName;
+        private Integer num;
+        private float percent;
     }
 }

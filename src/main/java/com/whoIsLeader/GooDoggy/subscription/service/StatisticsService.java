@@ -3,18 +3,15 @@ package com.whoIsLeader.GooDoggy.subscription.service;
 import com.whoIsLeader.GooDoggy.subscription.entity.Category;
 import com.whoIsLeader.GooDoggy.subscription.entity.GroupEntity;
 import com.whoIsLeader.GooDoggy.subscription.entity.PersonalEntity;
-import com.whoIsLeader.GooDoggy.user.DTO.StatisticsRes;
+import com.whoIsLeader.GooDoggy.subscription.DTO.StatisticsRes;
 import com.whoIsLeader.GooDoggy.user.entity.UserEntity;
 import com.whoIsLeader.GooDoggy.user.service.UserService;
 import com.whoIsLeader.GooDoggy.util.BaseException;
-import com.whoIsLeader.GooDoggy.util.BaseResponseStatus;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static com.whoIsLeader.GooDoggy.subscription.entity.Category.FOOD;
 import static com.whoIsLeader.GooDoggy.subscription.entity.Category.OTT;
 
 @Service
@@ -79,5 +76,45 @@ public class StatisticsService {
             briefSubList.add(new StatisticsRes.briefSub(temp.getProfileImg(), temp.getServiceName()));
         }
         return briefSubList;
+    }
+
+    public List<StatisticsRes.personal> getPersonalStatistics(HttpServletRequest request) throws BaseException {
+        UserEntity user = this.userService.getSessionUser(request);
+        List<PersonalEntity> personal = this.personalService.getEntityList();
+        HashMap<String,Integer> personalMap = new HashMap<String,Integer>();
+        for(PersonalEntity temp: personal){
+            Integer num = 1;
+            if(personalMap.containsKey(temp.getServiceName())){
+                num = personalMap.get(temp.getServiceName()) + 1;
+            }
+            personalMap.put(temp.getServiceName(), num);
+        }
+        int totalUser = 0;
+        for (int temp: personalMap.values()) {
+            totalUser += temp;
+        }
+        List<Map.Entry<String, Integer>> entryList = new ArrayList<Map.Entry<String, Integer>>(personalMap.entrySet());
+        Collections.sort(entryList, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        List<StatisticsRes.personal> personalList = new ArrayList<>();
+        int count = 1;
+        float totalPercent = 100;
+        int userNum = totalUser;
+        for (Map.Entry<String, Integer> temp: entryList) {
+            if(count > 5) {
+                personalList.add(new StatisticsRes.personal("기타", userNum, totalPercent));
+                break;
+            }
+            float percent = Float.parseFloat(String.format("%.2f", (float)temp.getValue() / totalUser * 100));
+            personalList.add(new StatisticsRes.personal(temp.getKey(), temp.getValue(), percent));
+            totalPercent -= percent;
+            userNum -= temp.getValue();
+            count++;
+        }
+        return personalList;
     }
 }

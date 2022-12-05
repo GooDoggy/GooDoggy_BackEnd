@@ -1,9 +1,7 @@
 package com.whoIsLeader.GooDoggy.subscription.controller;
 
-import com.whoIsLeader.GooDoggy.subscription.DTO.PersonalReq;
-import com.whoIsLeader.GooDoggy.subscription.service.PersonalService;
 import com.whoIsLeader.GooDoggy.subscription.service.StatisticsService;
-import com.whoIsLeader.GooDoggy.user.DTO.StatisticsRes;
+import com.whoIsLeader.GooDoggy.subscription.DTO.StatisticsRes;
 import com.whoIsLeader.GooDoggy.util.BaseException;
 import com.whoIsLeader.GooDoggy.util.BaseResponse;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +36,17 @@ public class StatisticsController {
         try {
             List<StatisticsRes.briefSub> briefSubList = this.statisticsService.getBriefList(request);
             return new BaseResponse<>(briefSubList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/personal")
+    public BaseResponse<List<StatisticsRes.personal>> getPersonal(HttpServletRequest request) {
+        try {
+            List<StatisticsRes.personal> personalList = this.statisticsService.getPersonalStatistics(request);
+            return new BaseResponse<>(personalList);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
