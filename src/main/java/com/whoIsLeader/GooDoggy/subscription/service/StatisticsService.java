@@ -117,4 +117,44 @@ public class StatisticsService {
         }
         return personalList;
     }
+
+    public List<StatisticsRes.group> getGroupStatistics(HttpServletRequest request) throws BaseException {
+        UserEntity user = this.userService.getSessionUser(request);
+        List<GroupEntity> group = this.groupService.getEntityList();
+        HashMap<String,Integer> groupMap = new HashMap<String,Integer>();
+        for(GroupEntity temp: group){
+            Integer num = 1;
+            if(groupMap.containsKey(temp.getCategory())) {
+                num = groupMap.get(temp.getCategory()) + (int) (long) temp.getJoinNum();
+            }
+            groupMap.put(temp.getServiceName(), num);
+        }
+        int totalUser = 0;
+        for (int temp: groupMap.values()) {
+            totalUser += temp;
+        }
+        List<Map.Entry<String, Integer>> entryList = new ArrayList<Map.Entry<String, Integer>>(groupMap.entrySet());
+        Collections.sort(entryList, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        List<StatisticsRes.group> groupList = new ArrayList<>();
+        int count = 1;
+        float totalPercent = 100;
+        int userNum = totalUser;
+        for (Map.Entry<String, Integer> temp: entryList) {
+            if(count > 5) {
+                groupList.add(new StatisticsRes.group("기타", userNum, totalPercent));
+                break;
+            }
+            float percent = Float.parseFloat(String.format("%.2f", (float)temp.getValue() / totalUser * 100));
+            groupList.add(new StatisticsRes.group(temp.getKey(), temp.getValue(), percent));
+            totalPercent -= percent;
+            userNum -= temp.getValue();
+            count++;
+        }
+        return groupList;
+    }
 }

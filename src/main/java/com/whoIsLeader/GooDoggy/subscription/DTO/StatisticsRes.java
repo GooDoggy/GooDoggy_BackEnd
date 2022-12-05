@@ -34,4 +34,14 @@ public class StatisticsRes {
         private Integer num;
         private float percent;
     }
+
+    @Setter
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class group{
+        private String serviceName;
+        private Integer num;
+        private float percent;
+    }
 }

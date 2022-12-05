@@ -51,4 +51,15 @@ public class StatisticsController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/group")
+    public BaseResponse<List<StatisticsRes.group>> getGroup(HttpServletRequest request) {
+        try {
+            List<StatisticsRes.group> groupList = this.statisticsService.getGroupStatistics(request);
+            return new BaseResponse<>(groupList);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
