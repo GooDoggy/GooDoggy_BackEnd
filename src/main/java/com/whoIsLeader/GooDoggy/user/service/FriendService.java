@@ -128,7 +128,12 @@ public class FriendService {
         for(FriendEntity temp : friendEntityList){
             if(temp.getStatus().equals("active")){
                 FriendRes.FriendInfo friendInfo = new FriendRes.FriendInfo();
-                friendInfo.setFriendIdx(temp.getFriendIdx());
+                if(temp.getReqUserIdx().equals(user)){
+                    friendInfo.setFriendIdx(temp.getResUserIdx().getUserIdx());
+                }
+                else{
+                    friendInfo.setFriendIdx(temp.getReqUserIdx().getUserIdx());
+                }
                 friendInfo.setProfileImg(temp.getReqUserIdx().getProfileImg());
                 if(temp.getResUserIdx().getId().equals(user.getId())){
                     friendInfo.setId(temp.getReqUserIdx().getId());
