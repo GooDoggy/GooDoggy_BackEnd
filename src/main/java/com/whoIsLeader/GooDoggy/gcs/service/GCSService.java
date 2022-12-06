@@ -55,7 +55,8 @@ public class GCSService {
     public String getServiceImg(String serviceName){
         String returnImg = "https://storage.googleapis.com/goodoggy_bucket/goodoggy.jpg";
 
-        if(serviceName.equals("쿠팡") || serviceName.equals("로켓배송") || serviceName.equals("쿠팡 로켓배송")) {
+        if(serviceName.equals("쿠팡와우") || serviceName.equals("로켓배송") || serviceName.equals("쿠팡 로켓배송")
+                || serviceName.equals("로켓와우") || serviceName.equals("와우")) {
             returnImg = "https://storage.googleapis.com/goodoggy_bucket/platform/coupang.png";
         }
         if(serviceName.equals("플로")) {
