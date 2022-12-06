@@ -47,7 +47,7 @@ public class UserEntity extends BaseEntity {
 //    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userIdx", orphanRemoval = true)
 //    private List<UserGroupEntity> userGroupEntityList = new ArrayList<>();
 
-    @Column(columnDefinition = "varchar(200) default 'https://storage.googleapis.com/goodoggy_bucket/goodoggy.jpg'") //기본 이미지
+    @Column(columnDefinition = "varchar(200) default 'https://storage.googleapis.com/goodoggy_bucket/goodoggy_profile.jpg'") //기본 이미지
     private String profileImg;
 
     @Builder
