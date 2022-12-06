@@ -182,7 +182,7 @@ public class TotalService {
         for(Integer temp : dateList){
             if(temp > LocalDate.now().getDayOfMonth() && nearestDate > temp){
                 nearestDate = temp;
-                result = (temp - LocalDate.now().getDayOfMonth()) + "일 뒤";
+                result = (temp - LocalDate.now().getDayOfMonth() - 1) + "일 뒤";
             }
         }
         return result;
