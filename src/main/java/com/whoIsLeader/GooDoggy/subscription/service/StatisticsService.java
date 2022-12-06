@@ -64,7 +64,7 @@ public class StatisticsService {
         List<StatisticsRes.category> categoryList = new ArrayList<>();
         for (Category temp: categoryMap.keySet()) {
             float percent = Float.parseFloat(String.format("%.2f", (float)categoryMap.get(temp) / totalUser * 100));
-            categoryList.add(new StatisticsRes.category(temp, categoryMap.get(temp), percent));
+            categoryList.add(new StatisticsRes.category(temp.toString(), categoryMap.get(temp), percent));
         }
         return categoryList;
     }

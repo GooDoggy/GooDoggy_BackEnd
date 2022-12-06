@@ -13,7 +13,7 @@ public class StatisticsRes {
     @Builder
     @AllArgsConstructor
     public static class category{
-        private Category category;
+        private String category;
         private Integer num;
         private float percent;
     }
