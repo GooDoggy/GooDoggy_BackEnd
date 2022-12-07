@@ -74,6 +74,9 @@ public class TotalService {
         int year = LocalDate.now().getYear();
         int month = LocalDate.now().getMonth().getValue();
         for(PersonalEntity temp : personal){
+            if(temp.getStatus().equals("inactive")){
+                continue;
+            }
             LocalDate payDate = temp.getFirstDayOfPayment();
             if(temp.getPaymentCycle() < 0){
                 while(payDate.getYear() < year || (payDate.getYear() == year && payDate.getMonth().getValue() < month)){
@@ -95,6 +98,9 @@ public class TotalService {
             }
         }
         for(GroupEntity temp : group){
+            if(temp.getStatus().equals("inactive")){
+                continue;
+            }
             LocalDate payDate = temp.getFirstDayOfPayment();
             if(temp.getPaymentCycle() < 0){
                 while(!payDate.isAfter(temp.getLastDayOfPayment()) && (payDate.getYear() < year || (payDate.getYear() == year && payDate.getMonth().getValue() < month))){
@@ -182,7 +188,7 @@ public class TotalService {
         for(Integer temp : dateList){
             if(temp > LocalDate.now().getDayOfMonth() && nearestDate > temp){
                 nearestDate = temp;
-                result = (temp - LocalDate.now().getDayOfMonth() - 1) + "일 뒤";
+                result = (temp - LocalDate.now().getDayOfMonth()) + "일 뒤";
             }
         }
         return result;
